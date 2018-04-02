@@ -11,8 +11,9 @@ public class GameSelectView extends Scene {
     private GridPane pane;
     private Button tttButton;
 
-    public GameSelectView(GridPane pane) {
-        super(pane);
+    public GameSelectView() {
+        super(new GridPane());
+        pane = (GridPane) super.getRoot();
         pane.setPadding(new Insets(12.5, 12.5, 12.5, 12.5));
         pane.setVgap(5.5);
         pane.setAlignment(Pos.CENTER);
