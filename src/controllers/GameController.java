@@ -37,8 +37,4 @@ public class GameController {
         }
         return grid;
     }
-
-    public GameView getGameView() {
-        return gameView;
-    }
 }

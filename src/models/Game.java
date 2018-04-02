@@ -4,10 +4,12 @@ public class Game {
     private int turn;
     private int gridWidth;
     private int gridHeight;
+    private Player[] players;
 
-    public Game(int gridWidth, int gridHeight) {
+    public Game(int gridWidth, int gridHeight, Player[] players) {
         this.gridWidth = gridWidth;
         this.gridHeight = gridHeight;
+        this.players = players;
     }
 
     public int getTurn() {
