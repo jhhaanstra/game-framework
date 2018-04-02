@@ -1,8 +1,10 @@
 package controllers;
 
+import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 import models.Game;
 import views.GameView;
 import views.TicTacToeView;
@@ -11,9 +13,11 @@ public class GameController {
     private Game gameModel;
     private GameView gameView;
 
-    public GameController(Game model) {
+    public GameController(Game model, Stage primaryStage) {
         this.gameModel = model;
         this.gameView = new TicTacToeView(generateGrid());
+        primaryStage.setTitle("Tic tac toe"); // Set the stage title
+        primaryStage.setScene((Scene) this.gameView); // Place the scene in the stage
     }
 
     private GridPane generateGrid() {
@@ -24,7 +28,6 @@ public class GameController {
                 Rectangle r = new Rectangle(100, 100);
                 r.setFill(Color.WHITE);
                 r.setStroke(Color.BLACK);
-
                 r.setOnMouseClicked(e -> {
                     r.setFill((gameModel.getTurn() % 2 == 0) ? Color.BLUE : Color.RED);
                     gameModel.incrementTurn();

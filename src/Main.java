@@ -1,9 +1,6 @@
-import controllers.GameController;
 import controllers.GameSelectController;
 import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
-import models.Game;
 
 public class Main extends Application {
     public void start(Stage primaryStage) {
@@ -11,10 +8,7 @@ public class Main extends Application {
         //GameController controller = new GameController(ttt);
         //Scene scene = (Scene) controller.getGameView();
 
-        GameSelectController controller = new GameSelectController();
-        Scene scene = controller.getView();
-        primaryStage.setTitle("Choose a game!"); // Set the stage title
-        primaryStage.setScene(scene); // Place the scene in the stage
+        GameSelectController controller = new GameSelectController(primaryStage);
         primaryStage.show(); // Display the stage
     }
 }
