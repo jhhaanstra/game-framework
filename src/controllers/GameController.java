@@ -16,8 +16,8 @@ public class GameController {
     public GameController(Game model, Stage primaryStage) {
         this.gameModel = model;
         this.gameView = new TicTacToeView(generateGrid());
-        primaryStage.setTitle("Tic tac toe"); // Set the stage title
-        primaryStage.setScene((Scene) this.gameView); // Place the scene in the stage
+        primaryStage.setTitle("Tic tac toe");
+        primaryStage.setScene((Scene) this.gameView);
     }
 
     private GridPane generateGrid() {
