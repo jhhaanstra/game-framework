@@ -38,7 +38,7 @@ public class Game {
         return playField;
     }
 
-    public void updatePlayField(int id, int state) {
-        System.out.println(id + " " + state);
+    public void updatePlayField(int index, int value) {
+        playField[index] = value;
     }
 }

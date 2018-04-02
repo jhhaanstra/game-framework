@@ -12,7 +12,7 @@ public class TicTacToeView extends Scene implements GameView {
 
     @Override
     public void setGrid(GridPane grid) {
-        this.grid = grid;
+        super.setRoot(grid);
     }
 
     @Override

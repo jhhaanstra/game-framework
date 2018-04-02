@@ -13,8 +13,8 @@ public class GameDecoratorController implements GameController {
     }
 
     @Override
-    public void updateGame() {
-        decoratedGameController.updateGame();
+    public void updateGame(int index, int value) {
+        decoratedGameController.updateGame(index, value);
     }
 
     @Override

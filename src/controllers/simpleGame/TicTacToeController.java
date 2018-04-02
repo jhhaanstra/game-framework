@@ -14,7 +14,7 @@ public class TicTacToeController extends GameDecoratorController {
     }
 
     @Override
-    public void updateGame() {
+    public void updateGame(int index, int vlaue) {
         // pass
     }
 
