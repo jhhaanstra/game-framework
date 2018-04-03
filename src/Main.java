@@ -7,4 +7,8 @@ public class Main extends Application {
         GameSelectController controller = new GameSelectController(primaryStage);
         primaryStage.show();
     }
+    
+    public static void main(String[] args){
+	launch(args);
+    }
 }
