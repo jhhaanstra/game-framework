@@ -14,8 +14,8 @@ public class Game {
         this.playField = new int[gridWidth * gridHeight];
 
         // Test :)
-        //int[] playField = {1, 0, 2, 0, 0, 2, 1, 0, 1};
-        //this.playField = playField;
+        // int[] playField = {1, 0, 2, 0, 0, 2, 1, 0, 1};
+        // this.playField = playField;
     }
 
     public int getTurn() {
