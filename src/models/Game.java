@@ -38,7 +38,18 @@ public class Game {
         return playField;
     }
 
-    public void updatePlayField(int index, int value) {
-        playField[index] = value;
+    public int getPlayFieldAtIndex(int index){
+	return playField[index];
+    }
+
+    /*public void updatePlayField(int index, int value) {
+        playField[index] = value;*/
+
+    public void updatePlayField(int index, boolean player) {
+        if(player == false){
+	        playField[index] = 1;
+        } else {
+            playField[index] = 2;
+        }
     }
 }

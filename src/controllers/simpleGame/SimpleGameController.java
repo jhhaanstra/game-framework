@@ -23,9 +23,10 @@ public class SimpleGameController implements GameController {
         GridPane grid = new GridPane();
 
         for (int y = 0; y < gameModel.getGridHeight(); y++) {
+	        int Height = y;
             for (int x = 0; x < gameModel.getGridWidth(); x++) {
                 int index = (y * 3) + x;
-
+		        int Width = x;
                 Rectangle r = new Rectangle(100, 100);
                 switch (playField[index]) {
                     case 0:
@@ -41,12 +42,17 @@ public class SimpleGameController implements GameController {
 
                 r.setStroke(Color.BLACK);
                 r.setOnMouseClicked(e -> {
+                    if(gameModel.getPlayFieldAtIndex(index) == 0){
+                        r.setFill((gameModel.getTurn() % 2 == 0) ? Color.BLUE : Color.RED);
+                        gameModel.incrementTurn();
+                        gameModel.updatePlayField(index, (gameModel.getTurn() % 2 == 0));
+                    }
                     updateGame(index, 1);
+
                 });
                 grid.add(r, x, y);
             }
         }
-        System.out.println("test");
         return grid;
     }
 
@@ -58,7 +64,7 @@ public class SimpleGameController implements GameController {
     @Override
     public void updateGame(int index, int value) {
         if (legalMove()) {
-            gameModel.updatePlayField(index, value);
+            //gameModel.updatePlayField(index, value);
             gameView.setGrid(generateGrid(gameModel.getPlayField()));
         }
 
