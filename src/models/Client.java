@@ -2,6 +2,8 @@ package models;
 
 import java.util.Stack;
 import java.util.function.Consumer;
+import controllers.*;
+import controllers.simpleGame.SimpleGameController;
 
 public class Client extends Server {
     private static Client client;
@@ -10,11 +12,14 @@ public class Client extends Server {
     private static Stack<String> errors = new Stack<>();
     private static Stack<String> info = new Stack<>();
 
+    static GameStartController game;
+
     public static Client getInstance() {
         if (client == null) {
             client = new Client("127.0.0.1", 7789, (data -> {
                 if (data.contains("ERR")) errors.push(data);
                 if (data.contains("SVR")) info.push(data);
+                //if (data.contains("SVR GAME MATCH")) game.createTicTacToe();
             }));
         }
         return client;

@@ -18,6 +18,11 @@ public class ClientCommands {
         return getInfo();
     }
 
+    public String challengePlayer(String player) {
+        Client.getInstance().send("challenge 'kees' 'Tic-tac-toe'");
+        return getReturnMessage();
+    }
+
     public String getReturnMessage() {
         try {
             Thread.sleep(100);
