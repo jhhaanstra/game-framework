@@ -16,8 +16,10 @@ public class GameLobbyView extends Scene {
     private GridPane pane;
     private TextArea textArea;
     private Button startButton;
+    private Button challengeButton;
     private ListView<String> playerList = new ListView<>();
-    ObservableList<String> data = FXCollections.observableArrayList();
+    ObservableList<String> lobbyData = FXCollections.observableArrayList();
+    private String challengePlayer;
 
     public GameLobbyView() {
         super(new GridPane());
@@ -31,17 +33,20 @@ public class GameLobbyView extends Scene {
         pane.add(textArea, 0, 1);*/
         startButton = new Button("Start Game");
         pane.add(startButton, 0 , 2);
+        challengeButton = new Button("Challenge");
+        pane.add(challengeButton, 0 , 3);
 
-        ListView<String> listView = new ListView<String>(data);
+        ListView<String> listView = new ListView<>(lobbyData);
         listView.setPrefSize(200, 250);
 
-        data.addAll();
-        listView.setItems(data);
+        lobbyData.addAll();
+        listView.setItems(lobbyData);
         listView.getSelectionModel().selectedItemProperty().addListener(
                 (ObservableValue<? extends String> ov, String old_val,
                  String new_val) -> {
-                    System.out.println("Challenge " + new_val);
+                    challengePlayer = new_val;
                 });
+
         pane.add(listView, 0 , 1);
         this.pane = pane;
     }
@@ -54,10 +59,14 @@ public class GameLobbyView extends Scene {
         return startButton;
     }
 
+    public Button getChallengeButton() { return challengeButton; }
+
     public TextArea getTextArea() { return textArea; }
 
     public ListView getListView() { return playerList; }
 
-    public ObservableList getList() { return data; }
+    public ObservableList getList() { return lobbyData; }
+
+    public String getPlayer() { return challengePlayer; }
 
 }
