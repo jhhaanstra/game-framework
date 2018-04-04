@@ -1,25 +1,26 @@
 package controllers.simpleGame;
 
-import controllers.simpleGame.GameDecoratorController;
-import controllers.simpleGame.SimpleGameController;
-
 public class TicTacToeController extends GameDecoratorController {
+
     public TicTacToeController(SimpleGameController simpleGame) {
         super(simpleGame);
+
     }
 
     @Override
     public boolean legalMove() {
-        return true;
+        if (super.legalMove())
+            return true;
+        return false;
     }
 
     @Override
-    public void updateGame(int index, int vlaue) {
-        // pass
+    public void updateGame(int index, int value) {
+        super.updateGame(index, value);
     }
 
     @Override
     public void updateView() {
-        // pass
+        super.updateView();
     }
 }

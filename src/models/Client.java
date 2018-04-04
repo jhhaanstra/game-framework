@@ -28,7 +28,7 @@ public class Client extends Server {
         send("login " + name);
 
             return true;
-        else return false;
+        //else return false;
     }
 
     @Override

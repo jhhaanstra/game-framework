@@ -1,26 +1,23 @@
 package controllers.simpleGame;
 
-import javafx.application.Platform;
-import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import models.Client;
 import models.Game;
 import models.Server;
 import views.GameView;
-import views.TicTacToeView;
 
 public class SimpleGameController implements GameController {
     private Game gameModel;
     private GameView gameView;
     private Server server;
 
-    public SimpleGameController(Game model, Stage primaryStage) {
+    public SimpleGameController(Game model, Stage primaryStage, GameView gameView) {
         this.gameModel = model;
-        this.gameView = new TicTacToeView(generateGrid(gameModel.getPlayField()));
-        primaryStage.setScene((Scene) this.gameView);
+        this.gameView = gameView;
+        gameView.setGrid(generateGrid(gameModel.getPlayField()));
+        primaryStage.setScene(this.gameView);
     }
 
     private GridPane generateGrid(int[] playField) {
@@ -50,7 +47,7 @@ public class SimpleGameController implements GameController {
                         r.setFill((gameModel.getTurn() % 2 == 0) ? Color.BLUE : Color.RED);
                         gameModel.incrementTurn();
                         gameModel.updatePlayField(index, (gameModel.getTurn() % 2 == 0));
-                        server.send("");
+                        //server.send("");
                     }
                     updateGame(index, 1);
 

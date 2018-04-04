@@ -1,22 +1,11 @@
 package views;
 
-import javafx.scene.Scene;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.BorderPane;
 
-public class TicTacToeView extends Scene implements GameView {
-    private GridPane grid;
+public class TicTacToeView extends GameView {
+    BorderPane pane;
 
-    public TicTacToeView(GridPane grid) {
-        super(grid);
-    }
-
-    @Override
-    public void setGrid(GridPane grid) {
-        super.setRoot(grid);
-    }
-
-    @Override
-    public GridPane getGrid() {
-        return grid;
+    public TicTacToeView() {
+        super();
     }
 }

@@ -1,19 +1,21 @@
 import controllers.GameSelectController;
+import controllers.simpleGame.SimpleGameController;
+import controllers.simpleGame.TicTacToeController;
 import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
-import models.Client;
-import views.LoginView;
+import models.Game;
+import views.GameView;
+import views.TicTacToeView;
 
 public class Main extends Application {
     public void start(Stage primaryStage) {
-        try {
+        /*try {
             Client.getInstance().startConnection();
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        //GameSelectController controller = new GameSelectController(primaryStage);
-        primaryStage.setScene(new Scene(new LoginView()));
+        }*/
+        TicTacToeController controller = new TicTacToeController(new SimpleGameController(new Game(3, 3), primaryStage, (GameView) new TicTacToeView()));
+        //primaryStage.setScene(new Scene(new LoginView()));
         primaryStage.show();
     }
     
