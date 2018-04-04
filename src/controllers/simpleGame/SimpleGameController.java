@@ -47,7 +47,7 @@ public class SimpleGameController implements GameController {
                         r.setFill((gameModel.getTurn() % 2 == 0) ? Color.BLUE : Color.RED);
                         gameModel.incrementTurn();
                         gameModel.updatePlayField(index, (gameModel.getTurn() % 2 == 0));
-                        //server.send("");
+                        //server.send("get playerlist");
                     }
                     updateGame(index, 1);
 

@@ -22,9 +22,9 @@ public abstract class Server {
 
     public void send(String data) {
         try {
-            System.out.println(connThread);
             connThread.out.println(data);
         } catch (Exception e) {
+            System.out.println("Zenden wil niet..");
             e.printStackTrace();
         }
     }
