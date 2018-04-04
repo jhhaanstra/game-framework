@@ -23,6 +23,11 @@ public class ClientCommands {
         return getReturnMessage();
     }
 
+    public String sendMove(int move) {
+        Client.getInstance().send("move " + move);
+        return getInfo();
+    }
+
     public String getReturnMessage() {
         try {
             Thread.sleep(100);

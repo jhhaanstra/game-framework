@@ -4,14 +4,19 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import models.ClientCommands;
 import models.Game;
 import models.Server;
 import views.GameView;
+
+import static javafx.scene.paint.Color.BLUE;
 
 public class SimpleGameController implements GameController {
     private Game gameModel;
     private GameView gameView;
     private Server server;
+
+    ClientCommands commands = new ClientCommands();
 
     public SimpleGameController(Game model, Stage primaryStage, GameView gameView) {
         this.gameModel = model;
@@ -19,6 +24,7 @@ public class SimpleGameController implements GameController {
         gameView.setGrid(generateGrid(gameModel.getPlayField()));
         primaryStage.setScene(this.gameView);
     }
+
 
     private GridPane generateGrid(int[] playField) {
         GridPane grid = new GridPane();
@@ -42,15 +48,20 @@ public class SimpleGameController implements GameController {
                 }
 
                 r.setStroke(Color.BLACK);
+
+
+
                 r.setOnMouseClicked(e -> {
-                    if(gameModel.getPlayFieldAtIndex(index) == 0){
-                        r.setFill((gameModel.getTurn() % 2 == 0) ? Color.BLUE : Color.RED);
+                    r.setFill(Color.RED);
+                    try {
+                        String value  = Double.toString(r.getX());
+                        System.out.println(commands.sendMove(index));
                         gameModel.incrementTurn();
                         gameModel.updatePlayField(index, (gameModel.getTurn() % 2 == 0));
-                        //server.send("get playerlist");
+                    } catch (Exception e1) {
+                        e1.printStackTrace();
                     }
-                    updateGame(index, 1);
-
+                    r.setDisable(true);
                 });
                 grid.add(r, x, y);
             }

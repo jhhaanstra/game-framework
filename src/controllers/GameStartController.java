@@ -3,7 +3,6 @@ package controllers;
 import controllers.simpleGame.SimpleGameController;
 import controllers.simpleGame.TicTacToeController;
 import javafx.application.Platform;
-import javafx.beans.value.ObservableValue;
 import javafx.stage.Stage;
 import models.Client;
 import models.ClientCommands;
@@ -12,16 +11,20 @@ import views.GameLobbyView;
 import views.GameView;
 import views.TicTacToeView;
 
+import java.util.EmptyStackException;
+
 public class GameStartController {
     private GameLobbyView view;
     private Stage ticTacToe;
+    private Thread lobbyListener;
 
     ClientCommands commands = new ClientCommands();
 
     public GameStartController(Stage primaryStage){
         view = new GameLobbyView();
 
-        new Thread(new updateLobby()).start();
+        lobbyListener = new Thread(new updateLobby());
+        lobbyListener.start();
         ticTacToe = primaryStage;
 
         view.getStartButton().setOnMouseClicked(e -> {
@@ -38,16 +41,19 @@ public class GameStartController {
     }
 
     public void createTicTacToe() {
-        new TicTacToeController(new SimpleGameController(new Game(3, 3), ticTacToe, (GameView) new TicTacToeView()));
+        new TicTacToeController(new SimpleGameController(new Game(3, 3), ticTacToe, new TicTacToeView()));
     }
+
 
     class updateLobby implements Runnable {
 
         private int turnBit = 0;
+        private boolean running;
 
         @Override
         public void run() {
-            while (true) {
+            running = true;
+            while (running) {
                 Platform.runLater(() -> {
                     commands.getPlayers();
                     String result = commands.getPlayers();
@@ -57,6 +63,17 @@ public class GameStartController {
                             view.getList().add(name.replace("\"", "") + "\n");
                         }
                     }
+
+                    try {
+                        System.out.println(Client.getInstance().getMatch().peek());
+                        if (Client.getInstance().getMatch().pop().contains("SVR GAME MATCH")) {
+                            running = false;
+                            createTicTacToe();
+                        }
+                    } catch (EmptyStackException e) {
+
+                    }
+
                 });
 
                 try {
