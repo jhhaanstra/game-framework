@@ -9,6 +9,7 @@ import models.ClientCommands;
 import models.Game;
 import views.GameLobbyView;
 import views.TicTacToeView;
+import controllers.simpleGame.Parser;
 
 import java.util.*;
 
@@ -16,6 +17,7 @@ public class GameStartController {
     private GameLobbyView view;
     private Stage ticTacToe;
     private Thread lobbyListener;
+    private Parser parser;
 
 
     ClientCommands commands = new ClientCommands();
@@ -41,26 +43,15 @@ public class GameStartController {
     }
 
     public HashMap getGameInfo() {
-        HashMap info = new HashMap();
         int stackSize = Client.getInstance().getMatch().size();
         if (stackSize != 1) {
             Client.getInstance().getMatch().pop().replace("\"", "");
         }
-        String query = Client.getInstance().getMatch().pop();
-        String subsetValues = query.substring(1, query.length() - 1);
-        String strippedValues = subsetValues.replace("\"", "");
-        strippedValues = strippedValues.replace(",", "");
-        strippedValues = strippedValues.replace(":", "");
-        System.out.println(strippedValues);
-        String[] values = strippedValues.split(" ");
 
-        for (int x = 0; x < values.length - 1; x++) {
-            String value = values[x + 1];
-            info.put(values[x], value);
-            x++;
-        }
+        HashMap info = Parser.parse(Client.getInstance().getMatch());
 
         return info;
+
 
     }
 

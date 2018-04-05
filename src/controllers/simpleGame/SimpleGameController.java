@@ -120,26 +120,7 @@ public class SimpleGameController implements GameController {
         public void run() {
             while(true) {
                 if (Client.getInstance().getMoves().size() > 0) {
-                    HashMap info = new HashMap();
-                    String query = Client.getInstance().getMoves().pop();
-                    String subsetValues = query.substring(1, query.length() - 1);
-                    String strippedValues = subsetValues.replace("\"", "");
-                    strippedValues = strippedValues.replace(",", "");
-                    strippedValues = strippedValues.replace(":", "");
-                    System.out.println(strippedValues);
-                    String[] values = strippedValues.split(" ");
-
-                    for (int x = 0; x < values.length - 1; x++) {
-                        String value = values[x + 1];
-                        info.put(values[x], value);
-                        x++;
-                    }
-
-                    Iterator it = info.entrySet().iterator();
-                    while (it.hasNext()) {
-                        Map.Entry pair = (Map.Entry)it.next();
-                        //System.out.println(pair.getKey() + " = " + pair.getValue());
-                    }
+                    HashMap info = Parser.parse(Client.getInstance().getMoves());
 
                     if(!Player.getInstance().getName().equals(info.get("PLAYER").toString())) {
                         System.out.println(info.get("PLAYER"));
