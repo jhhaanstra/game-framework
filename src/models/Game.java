@@ -14,8 +14,8 @@ public class Game {
         this.playField = new int[gridWidth * gridHeight];
 
         // Test :)
-        // int[] playField = {1, 0, 2, 0, 0, 2, 1, 0, 1};
-        // this.playField = playField;
+        //int[] playField = {1, 0, 2, 0, 0, 2, 1, 0, 1};
+        //this.playField = playField;
     }
 
     public int getTurn() {
@@ -39,7 +39,8 @@ public class Game {
     }
 
     public int getPlayFieldAtIndex(int index){
-	return playField[index];
+        System.out.println("Ik wil: " + index + ", array is: " + playField.toString());
+    	return playField[index];
     }
 
     /*public void updatePlayField(int index, int value) {

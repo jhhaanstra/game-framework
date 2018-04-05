@@ -1,26 +1,35 @@
 package controllers.simpleGame;
 
-public class TicTacToeController extends GameDecoratorController {
+import javafx.stage.Stage;
+import models.Game;
+import views.GameView;
 
-    public TicTacToeController(SimpleGameController simpleGame) {
-        super(simpleGame);
+import java.util.HashMap;
 
+public class TicTacToeController extends SimpleGameController {
+
+    public TicTacToeController(Game model, Stage primaryStage, GameView gameView, HashMap info) {
+        super(model, primaryStage, gameView, info);
+        updateGame();
     }
 
-    @Override
-    public boolean legalMove() {
-        if (super.legalMove())
+    public boolean legalMove(int index) {
+        if (super.legalMove(index))
             return true;
         return false;
     }
 
-    @Override
-    public void updateGame(int index, int value) {
-        super.updateGame(index, value);
+    public void updateGame() {
+        super.updateGame();
+        for (int i = 0; i < listRectangles.size(); i++) {
+            if (legalMove(i)) {
+                setOnClick(i);
+            }
+        }
     }
 
-    @Override
     public void updateView() {
         super.updateView();
+        // Update je score
     }
 }

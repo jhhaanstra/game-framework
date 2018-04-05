@@ -1,9 +1,11 @@
 package controllers.simpleGame;
 
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import models.*;
 import lib.Parser;
@@ -15,26 +17,38 @@ import java.util.Iterator;
 import java.util.Map;
 
 
-public class SimpleGameController implements GameController {
-    private Game gameModel;
-    private GameView gameView;
-    private HashMap gameInfo;
-    private ArrayList<Rectangle> listRectangles;
-
-
+public abstract class SimpleGameController {
+    protected Game gameModel;
+    protected GameView gameView;
+    protected HashMap gameInfo;
+    protected ArrayList<Rectangle> listRectangles;
     ClientCommands commands = new ClientCommands();
 
     public SimpleGameController(Game model, Stage primaryStage, GameView gameView, HashMap info) {
-        this.gameModel = model;
+        gameModel = model;
         this.gameView = gameView;
-        this.gameInfo = info;
+        gameInfo = info;
         gameView.setGrid(generateGrid(gameModel.getPlayField()));
         new Thread(new checkMoves()).start();
         primaryStage.setScene(this.gameView);
     }
 
+    protected void setOnClick(int i) {
+        Rectangle r = listRectangles.get(i);
+        r.setOnMouseClicked(e -> {
+            r.setFill(Color.RED);
+            try {
+                System.out.println(commands.sendMove(i));
+                gameModel.incrementTurn();
+                gameModel.updatePlayField(i, (gameModel.getTurn() % 2 == 0));
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+            r.setDisable(true);
+        });
+    }
 
-    private GridPane generateGrid(int[] playField) {
+    protected GridPane generateGrid(int[] playField) {
         GridPane grid = new GridPane();
         listRectangles = new ArrayList<>();
         Iterator it = gameInfo.entrySet().iterator();
@@ -49,12 +63,9 @@ public class SimpleGameController implements GameController {
             count++;
         }
 
-
         for (int y = 0; y < gameModel.getGridHeight(); y++) {
-	        int Height = y;
             for (int x = 0; x < gameModel.getGridWidth(); x++) {
                 int index = (y * 3) + x;
-		        int Width = x;
                 Rectangle r = new Rectangle(100, 100);
                 switch (playField[index]) {
                     case 0:
@@ -67,39 +78,23 @@ public class SimpleGameController implements GameController {
                         r.setFill(Color.RED);
                         break;
                 }
-
                 r.setStroke(Color.BLACK);
                 listRectangles.add(r);
-
-                r.setOnMouseClicked(e -> {
-                    r.setFill(Color.RED);
-                    try {
-                        String value  = Double.toString(r.getX());
-                        System.out.println(commands.sendMove(index));
-                        gameModel.incrementTurn();
-                        gameModel.updatePlayField(index, (gameModel.getTurn() % 2 == 0));
-                    } catch (Exception e1) {
-                        e1.printStackTrace();
-                    }
-                    r.setDisable(true);
-                });
                 grid.add(r, x, y);
             }
         }
         return grid;
     }
 
-    @Override
-    public boolean legalMove() {
+    protected boolean legalMove(int index) {
         return true;
     }
 
-    @Override
-    public void updateGame(int index, int value) {
-        if (legalMove()) {
-            //gameModel.updatePlayField(index, value);
-            gameView.setGrid(generateGrid(gameModel.getPlayField()));
-        }
+    public void updateGame() {
+        gameView.setGrid(generateGrid(gameModel.getPlayField()));
+    }
+
+    public void updateView() {
 
     }
 
@@ -109,26 +104,18 @@ public class SimpleGameController implements GameController {
         System.out.println("Vakje " + index + " gekleurd voor de tegenstander.");
     }
 
-    @Override
-    public void updateView() {
-        //pass
-    }
-
-
     class checkMoves implements Runnable {
-
         @Override
         public void run() {
             while(true) {
                 if (Client.getInstance().getMoves().size() > 0) {
                     HashMap info = Parser.parse(Client.getInstance().getMoves());
 
-                    if(!Player.getInstance().getName().equals(info.get("PLAYER").toString())) {
+                    if (!Player.getInstance().getName().equals(info.get("PLAYER").toString())) {
                         System.out.println(info.get("PLAYER"));
                         System.out.println(info.get("MOVE"));
                         fillRectangle(Integer.valueOf((String) info.get("MOVE")));
                     }
-
                 }
             }
         }

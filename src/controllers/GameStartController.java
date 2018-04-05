@@ -16,7 +16,7 @@ import java.util.*;
 public class GameStartController {
     private GameLobbyView view;
     private Stage ticTacToe;
-    private Thread lobbyListener;;
+    private Thread lobbyListener;
 
 
     ClientCommands commands = new ClientCommands();
@@ -56,8 +56,7 @@ public class GameStartController {
 
     public void createTicTacToe() {
             HashMap gameInfo = getGameInfo();
-            new TicTacToeController(new SimpleGameController(
-                    new Game(3, 3), ticTacToe, new TicTacToeView(), gameInfo));
+            new TicTacToeController(new Game(3, 3), ticTacToe, new TicTacToeView(), gameInfo);
     }
 
     class updateLobby implements Runnable {
@@ -83,10 +82,7 @@ public class GameStartController {
                             running = false;
                             createTicTacToe();
                         }
-                    } catch (EmptyStackException e) {
-
-                    }
-
+                    } catch (EmptyStackException e) {}
                 });
 
                 try {
