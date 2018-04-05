@@ -1,18 +1,20 @@
 package controllers.simpleGame;
 
+import controllers.GameSelectController;
+import javafx.application.Platform;
+import javafx.stage.Stage;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
 import models.*;
 import lib.Parser;
 import views.GameView;
+import javafx.scene.control.Alert.AlertType;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 
 public class SimpleGameController implements GameController {
@@ -20,6 +22,9 @@ public class SimpleGameController implements GameController {
     private GameView gameView;
     private HashMap gameInfo;
     private ArrayList<Rectangle> listRectangles;
+    private ArrayList<Label> labels;
+    private String opponent;
+    private Stage primaryStage;
 
 
     ClientCommands commands = new ClientCommands();
@@ -28,6 +33,7 @@ public class SimpleGameController implements GameController {
         this.gameModel = model;
         this.gameView = gameView;
         this.gameInfo = info;
+        this.primaryStage = primaryStage;
         gameView.setGrid(generateGrid(gameModel.getPlayField()));
         new Thread(new checkMoves()).start();
         primaryStage.setScene(this.gameView);
@@ -37,18 +43,25 @@ public class SimpleGameController implements GameController {
     private GridPane generateGrid(int[] playField) {
         GridPane grid = new GridPane();
         listRectangles = new ArrayList<>();
+        labels = new ArrayList<>();
         Iterator it = gameInfo.entrySet().iterator();
         int count = 9;
+        Label player = new Label("NAME: ");
+        Label name = new Label(Player.getInstance().getName());
+        grid.add(player, 0, count);
+        grid.add(name, 1, count);
+        count++;
         while(it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
             Label info = new Label(pair.getKey().toString());
             Label value = new Label(pair.getValue().toString());
+            labels.add(value);
             grid.add(info, 0, count);
             grid.add(value, 1, count);
             System.out.println(pair.getKey() + " = " + pair.getValue());
             count++;
         }
-
+        opponent = gameInfo.get("OPPONENT").toString();
 
         for (int y = 0; y < gameModel.getGridHeight(); y++) {
 	        int Height = y;
@@ -74,7 +87,7 @@ public class SimpleGameController implements GameController {
                 r.setOnMouseClicked(e -> {
                     r.setFill(Color.RED);
                     try {
-                        String value  = Double.toString(r.getX());
+                        /*String value  = Double.toString(r.getX());*/
                         System.out.println(commands.sendMove(index));
                         gameModel.incrementTurn();
                         gameModel.updatePlayField(index, (gameModel.getTurn() % 2 == 0));
@@ -111,24 +124,56 @@ public class SimpleGameController implements GameController {
 
     @Override
     public void updateView() {
-        //pass
+        // pass
+    }
+
+    public void updateTurn(String name) {
+        Platform.runLater(() ->{
+            labels.get(0).setText(name);
+        });
+    }
+
+    public void getScore() {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(AlertType.INFORMATION);
+            String response = Client.getInstance().getScore().pop();
+            if (response.contains("WIN")) {
+                alert.setHeaderText("Congratulations " + Player.getInstance().getName() + ", you won!!");
+            } else if (response.contains("DRAW")) {
+                alert.setHeaderText("The game between you and " + opponent + " ended in a draw.");
+            } else {
+                alert.setHeaderText("Sorry " + Player.getInstance().getName() + ", you lost..");
+            }
+            alert.setTitle("Score");
+            alert.setContentText("You can back to the game select room.");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK){
+                GameSelectController controller = new GameSelectController(primaryStage);
+            }
+        });
     }
 
 
     class checkMoves implements Runnable {
 
+        boolean running = true;
+
         @Override
         public void run() {
-            while(true) {
+            while(running) {
                 if (Client.getInstance().getMoves().size() > 0) {
                     HashMap info = Parser.parse(Client.getInstance().getMoves());
 
                     if(!Player.getInstance().getName().equals(info.get("PLAYER").toString())) {
-                        System.out.println(info.get("PLAYER"));
-                        System.out.println(info.get("MOVE"));
                         fillRectangle(Integer.valueOf((String) info.get("MOVE")));
+                        updateTurn(Player.getInstance().getName());
+                    } else {
+                        updateTurn(opponent);
                     }
-
+                }
+                if (Client.getInstance().getScore().size() > 0) {
+                    getScore();
+                    running = false;
                 }
             }
         }
