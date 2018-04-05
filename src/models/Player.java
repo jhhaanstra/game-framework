@@ -3,6 +3,7 @@ package models;
 public class Player {
     private static Player player;
     private static String name;
+    private static String game;
 
     private Player() {}
 
@@ -17,8 +18,14 @@ public class Player {
         name = playerName;
     }
 
+    public void setGame (String newGame) { game = newGame;}
+
     public String getName() {
         return name;
+    }
+
+    public String getGame() {
+        return game;
     }
 
 }

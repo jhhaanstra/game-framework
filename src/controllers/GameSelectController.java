@@ -2,6 +2,7 @@ package controllers;
 
 import javafx.stage.Stage;
 import models.ClientCommands;
+import models.Player;
 import views.GameSelectView;
 
 public class GameSelectController {
@@ -14,13 +15,15 @@ public class GameSelectController {
         view = new GameSelectView();
         view.getTttButton().setOnMouseClicked(e -> {
             commands.subscribeGame("Tic-tac-toe");
+            Player.getInstance().setGame("Tic-tac-toe");
             controllers.GameStartController controller = new controllers.GameStartController(primaryStage);
             primaryStage.show();
         });
 	
 	view.getReversiButton().setOnMouseClicked(e -> {
 	    commands.subscribeGame("Reversi");
-	    controllers.GameStartController controller = new controllers.GameStartController(primaryStage);
+        Player.getInstance().setGame("Reversi");
+        controllers.GameStartController controller = new controllers.GameStartController(primaryStage);
 	    primaryStage.show();
 	});
         primaryStage.setTitle("Choose a game!"); // Set the stage title

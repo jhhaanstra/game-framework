@@ -3,6 +3,7 @@ package controllers;
 import controllers.simpleGame.SimpleGameController;
 import controllers.simpleGame.TicTacToeController;
 import controllers.simpleGame.ReversiController;
+import models.Player;
 import views.ReversiView;
 import javafx.application.Platform;
 import javafx.stage.Stage;
@@ -88,7 +89,12 @@ public class GameStartController {
                     try {
                         if (!Client.getInstance().getMatch().isEmpty()) {
                             running = false;
-                            createTicTacToe();
+                            if (Player.getInstance().getGame().equals("Tic-tac-toe")) {
+                                createTicTacToe();
+                            } else {
+                                createReversi();
+                            }
+
                         }
                     } catch (EmptyStackException e) {}
                 });

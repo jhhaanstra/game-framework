@@ -19,7 +19,8 @@ public class ClientCommands {
     }
 
     public String challengePlayer(String player) {
-        Client.getInstance().send("challenge 'kees' 'Tic-tac-toe'");
+        System.out.println("challenge \"" + player.trim() + "\" \"Tic-tac-toe\"");
+        Client.getInstance().send("challenge \"" + player.trim() + "\" \"Tic-tac-toe\"");
         return getReturnMessage();
     }
 
