@@ -8,8 +8,8 @@ import java.util.HashMap;
 
 public class TicTacToeController extends SimpleGameController {
 
-    public TicTacToeController(Game model, Stage primaryStage, GameView gameView, HashMap info) {
-        super(model, primaryStage, gameView, info);
+    public TicTacToeController(Game model, Stage primaryStage, GameView gameView, HashMap info, int type) {
+        super(model, primaryStage, gameView, info, type);
         updateGame();
     }
 

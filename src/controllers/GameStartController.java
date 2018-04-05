@@ -2,6 +2,8 @@ package controllers;
 
 import controllers.simpleGame.SimpleGameController;
 import controllers.simpleGame.TicTacToeController;
+import controllers.simpleGame.ReversiController;
+import views.ReversiView;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import lib.Parser;
@@ -16,6 +18,7 @@ import java.util.*;
 public class GameStartController {
     private GameLobbyView view;
     private Stage ticTacToe;
+    private Stage reversi;
     private Thread lobbyListener;
 
 
@@ -27,6 +30,7 @@ public class GameStartController {
         lobbyListener = new Thread(new updateLobby());
         lobbyListener.start();
         ticTacToe = primaryStage;
+	reversi = primaryStage;
 
         view.getStartButton().setOnMouseClicked(e -> {
            //
@@ -56,9 +60,13 @@ public class GameStartController {
 
     public void createTicTacToe() {
             HashMap gameInfo = getGameInfo();
-            new TicTacToeController(new Game(3, 3), ticTacToe, new TicTacToeView(), gameInfo);
+            new TicTacToeController(new Game(3, 3), ticTacToe, new TicTacToeView(), gameInfo, 3);
     }
 
+    public void createReversi() {
+	HashMap gameInfo = getGameInfo();
+	new ReversiController(new Game(8, 8), reversi, new ReversiView(), gameInfo, 8);
+    }
     class updateLobby implements Runnable {
 
         private boolean running;

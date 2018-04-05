@@ -17,6 +17,12 @@ public class GameSelectController {
             controllers.GameStartController controller = new controllers.GameStartController(primaryStage);
             primaryStage.show();
         });
+	
+	view.getReversiButton().setOnMouseClicked(e -> {
+	    commands.subscribeGame("Reversi");
+	    controllers.GameStartController controller = new controllers.GameStartController(primaryStage);
+	    primaryStage.show();
+	});
         primaryStage.setTitle("Choose a game!"); // Set the stage title
         primaryStage.setScene(view); // Place the scene in the stage
     }

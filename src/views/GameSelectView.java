@@ -10,6 +10,7 @@ import javafx.scene.layout.GridPane;
 public class GameSelectView extends Scene {
     private GridPane pane;
     private Button tttButton;
+    private Button reversiButton;
 
     public GameSelectView() {
         super(new GridPane());
@@ -20,7 +21,8 @@ public class GameSelectView extends Scene {
         pane.add(new Label("Choose your game"), 0, 0);
         tttButton = new Button("TicTacToe");
         pane.add(tttButton, 0, 1);
-        pane.add(new Button("Reversi"), 0, 2);
+	reversiButton = new Button("Reversi");
+        pane.add(reversiButton, 0, 2);
         this.pane = pane;
     }
 
@@ -30,5 +32,9 @@ public class GameSelectView extends Scene {
 
     public Button getTttButton() {
         return tttButton;
+    }
+    
+    public Button getReversiButton() {
+	return reversiButton;
     }
 }

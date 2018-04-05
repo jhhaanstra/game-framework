@@ -22,6 +22,7 @@ import java.util.*;
 
 public abstract class SimpleGameController {
     protected Game gameModel;
+    protected int size;
     protected GameView gameView;
     protected HashMap gameInfo;
     protected ArrayList<Rectangle> listRectangles;
@@ -31,9 +32,10 @@ public abstract class SimpleGameController {
 
     ClientCommands commands = new ClientCommands();
 
-    public SimpleGameController(Game model, Stage primaryStage, GameView gameView, HashMap info) {
+    public SimpleGameController(Game model, Stage primaryStage, GameView gameView, HashMap info, int size) {
         gameModel = model;
         this.gameView = gameView;
+	this.size = size;
         this.gameInfo = info;
         this.primaryStage = primaryStage;
         gameView.setGrid(generateGrid(gameModel.getPlayField()));
@@ -81,7 +83,7 @@ public abstract class SimpleGameController {
 
         for (int y = 0; y < gameModel.getGridHeight(); y++) {
             for (int x = 0; x < gameModel.getGridWidth(); x++) {
-                int index = (y * 3) + x;
+                int index = (y * size) + x;
                 Rectangle r = new Rectangle(100, 100);
                 switch (playField[index]) {
                     case 0:

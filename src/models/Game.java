@@ -39,8 +39,11 @@ public class Game {
     }
 
     public int getPlayFieldAtIndex(int index){
-        System.out.println("Ik wil: " + index + ", array is: " + playField.toString());
+	if (index < 0 || index > 63){
+	    return 1;
+	} else {
     	return playField[index];
+	}
     }
 
     /*public void updatePlayField(int index, int value) {
