@@ -8,15 +8,15 @@ import models.Client;
 import models.ClientCommands;
 import models.Game;
 import views.GameLobbyView;
-import views.GameView;
 import views.TicTacToeView;
 
-import java.util.EmptyStackException;
+import java.util.*;
 
 public class GameStartController {
     private GameLobbyView view;
     private Stage ticTacToe;
     private Thread lobbyListener;
+
 
     ClientCommands commands = new ClientCommands();
 
@@ -28,7 +28,7 @@ public class GameStartController {
         ticTacToe = primaryStage;
 
         view.getStartButton().setOnMouseClicked(e -> {
-            new TicTacToeController(new SimpleGameController(new Game(3, 3), primaryStage, (GameView) new TicTacToeView()));
+           //
         });
 
         view.getChallengeButton().setOnMouseClicked(e -> {
@@ -40,14 +40,38 @@ public class GameStartController {
         primaryStage.setScene(view);
     }
 
-    public void createTicTacToe() {
-        new TicTacToeController(new SimpleGameController(new Game(3, 3), ticTacToe, new TicTacToeView()));
+    public HashMap getGameInfo() {
+        HashMap info = new HashMap();
+        int stackSize = Client.getInstance().getMatch().size();
+        if (stackSize != 1) {
+            Client.getInstance().getMatch().pop().replace("\"", "");
+        }
+        String query = Client.getInstance().getMatch().pop();
+        String subsetValues = query.substring(1, query.length() - 1);
+        String strippedValues = subsetValues.replace("\"", "");
+        strippedValues = strippedValues.replace(",", "");
+        strippedValues = strippedValues.replace(":", "");
+        System.out.println(strippedValues);
+        String[] values = strippedValues.split(" ");
+
+        for (int x = 0; x < values.length - 1; x++) {
+            String value = values[x + 1];
+            info.put(values[x], value);
+            x++;
+        }
+
+        return info;
+
     }
 
+    public void createTicTacToe() {
+            HashMap gameInfo = getGameInfo();
+            new TicTacToeController(new SimpleGameController(
+                    new Game(3, 3), ticTacToe, new TicTacToeView(), gameInfo));
+    }
 
     class updateLobby implements Runnable {
 
-        private int turnBit = 0;
         private boolean running;
 
         @Override
@@ -65,8 +89,7 @@ public class GameStartController {
                     }
 
                     try {
-                        System.out.println(Client.getInstance().getMatch().peek());
-                        if (Client.getInstance().getMatch().pop().contains("SVR GAME MATCH")) {
+                        if (!Client.getInstance().getMatch().isEmpty()) {
                             running = false;
                             createTicTacToe();
                         }

@@ -11,6 +11,7 @@ public class Client extends Server {
     private static Stack<String> errors = new Stack<>();
     private static Stack<String> info = new Stack<>();
     private static Stack<String> match = new Stack<>();
+    private static Stack<String> moves = new Stack<>();
 
 
     public static Client getInstance() {
@@ -18,7 +19,9 @@ public class Client extends Server {
             client = new Client("127.0.0.1", 7789, (data -> {
                 if (data.contains("ERR")) errors.push(data);
                 if (data.contains("SVR")) info.push(data);
-                if (data.contains("SVR GAME MATCH")) match.push(data);
+                if (data.contains("SVR GAME MATCH")) match.push("{" + data.split("\\{")[1]);
+                if (data.contains("SVR GAME MOVE")) moves.push("{" + data.split("\\{")[1]);
+                //System.out.println(data);
             }));
         }
         return client;
@@ -41,6 +44,8 @@ public class Client extends Server {
     public Stack<String> getMatch() {
         return match;
     }
+
+    public static Stack<String> getMoves() { return moves; }
 
     @Override
     protected String getIP() {

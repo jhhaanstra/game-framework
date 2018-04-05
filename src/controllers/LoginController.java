@@ -3,6 +3,7 @@ package controllers;
 import javafx.stage.Stage;
 import models.ClientCommands;
 import javafx.scene.control.Label;
+import models.Player;
 import views.LoginView;
 
 public class LoginController {
@@ -15,6 +16,7 @@ public class LoginController {
 
         view.getLoginButton().setOnMouseClicked(e -> {
             String response = commands.login(view.getTextField().getText());
+            Player.getInstance().setName(view.getTextField().getText());
             if (response.contains("ERR")) {
                 Label error = new Label(response);
                 view.getPane().add(error, 0, 3);
