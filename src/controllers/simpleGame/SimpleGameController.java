@@ -6,6 +6,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import models.*;
+import lib.Parser;
 import views.GameView;
 
 import java.util.ArrayList;

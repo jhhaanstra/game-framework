@@ -4,20 +4,19 @@ import controllers.simpleGame.SimpleGameController;
 import controllers.simpleGame.TicTacToeController;
 import javafx.application.Platform;
 import javafx.stage.Stage;
+import lib.Parser;
 import models.Client;
 import models.ClientCommands;
 import models.Game;
 import views.GameLobbyView;
 import views.TicTacToeView;
-import controllers.simpleGame.Parser;
 
 import java.util.*;
 
 public class GameStartController {
     private GameLobbyView view;
     private Stage ticTacToe;
-    private Thread lobbyListener;
-    private Parser parser;
+    private Thread lobbyListener;;
 
 
     ClientCommands commands = new ClientCommands();
