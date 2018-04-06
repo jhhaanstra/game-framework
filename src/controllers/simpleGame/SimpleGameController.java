@@ -44,12 +44,13 @@ public abstract class SimpleGameController {
     protected void setOnClick(int i) {
         Rectangle r = (Rectangle) gameView.getGrid().getChildren().get(i);
         r.setOnMouseClicked(e -> {
-            r.setFill(Color.RED);
             try {
                 //System.out.println(ClientCommands.sendMove(i));
+                gameModel.updatePlayField(i);
                 ClientCommands.sendMove(i);
                 gameModel.incrementTurn();
-                gameModel.updatePlayField(i);
+                gameView.setTurn(gameModel.getOpponent());
+                gameModel.setYourTurn(false);
                 updateGame();
             } catch (Exception e1) {
                 e1.printStackTrace();
@@ -83,13 +84,6 @@ public abstract class SimpleGameController {
     }
 
     public void updateGame() {
-        if (gameModel.isYourTurn()) {
-            gameView.setTurn(Player.getInstance().getName());
-            gameModel.setYourTurn(false);
-        } else {
-            gameView.setTurn(gameModel.getOpponent());
-            gameModel.setYourTurn(true);
-        }
         gameView.setGrid(generateGrid(gameModel.getPlayField()));
     }
 
@@ -125,12 +119,15 @@ public abstract class SimpleGameController {
             while(running) {
                 if (!Client.getInstance().getMoves().empty()) {
                     HashMap info = Parser.parse(Client.getInstance().getMoves());
-                    // Laat de AI op de movestack pushen...
-                    System.out.println(info);
-                    gameModel.updatePlayField(Integer.valueOf((String) info.get("MOVE")));
-                    Platform.runLater(() -> {
-                        updateGame();
-                    });
+                    if (!info.get("PLAYER").equals(Player.getInstance().getName())) {
+                        // Laat de AI op de movestack pushen...
+                        System.out.println("TurnInfo: " + info);
+                        gameModel.updatePlayField(Integer.valueOf((String) info.get("MOVE")));
+                        gameModel.setYourTurn(true);
+                        Platform.runLater(() -> {
+                            updateGame();
+                        });
+                    }
                 }
                 if (Client.getInstance().getScore().size() > 0) {
                     getScore();
