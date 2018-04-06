@@ -17,7 +17,7 @@ public abstract class ClientCommands {
     }
 
     public static String challengePlayer(String player) {
-        System.out.println("challenge \"" + player.trim() + "\" \"Tic-tac-toe\"");
+        //System.out.println("challenge \"" + player.trim() + "\" \"Tic-tac-toe\"");
         Client.getInstance().send("challenge \"" + player.trim() + "\" \"Tic-tac-toe\"");
         return getReturnMessage();
     }
@@ -40,12 +40,10 @@ public abstract class ClientCommands {
     }
 
     public static String getInfo() {
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return (String) Client.getInstance().getInfo().pop();
+        while (Client.getInstance().getInfo().empty()) {}
+        String message = Client.getInstance().getInfo().pop();
+        System.out.println("S: " + message);
+        return message;
 
     }
 

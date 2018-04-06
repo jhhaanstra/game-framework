@@ -19,14 +19,12 @@ import java.util.*;
 public class GameStartController {
     private GameLobbyView view;
     private Stage stage;
-    private Thread lobbyListener;
 
     public GameStartController(Stage primaryStage){
         view = new GameLobbyView();
+        new Thread(new LobbyListener()).start();
         updateListView();
 
-        lobbyListener = new Thread(new LobbyListener());
-        lobbyListener.start();
         stage = primaryStage;
 
         view.getStartButton().setOnMouseClicked(e -> {
@@ -35,7 +33,7 @@ public class GameStartController {
 
         view.getChallengeButton().setOnMouseClicked(e -> {
             ClientCommands.challengePlayer(view.getPlayer());
-            System.out.println(ClientCommands.challengePlayer(view.getPlayer()));
+            //System.out.println(ClientCommands.challengePlayer(view.getPlayer()));
         });
 
         view.getRefreshButton().setOnMouseClicked(e -> {

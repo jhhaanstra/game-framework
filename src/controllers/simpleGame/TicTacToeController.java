@@ -13,20 +13,20 @@ public class TicTacToeController extends SimpleGameController {
         updateGame();
     }
 
+    @Override
     public boolean legalMove(int index) {
-        if (super.legalMove(index))
-            return true;
-        return false;
+        return super.legalMove(index);
     }
 
+    @Override
     public void updateGame() {
         super.updateGame();
+
         for (int i = 0; i < gameView.getGrid().getChildren().size(); i++) {
             if (legalMove(i)) {
                 setOnClick(i);
             }
         }
         primaryStage.setScene(this.gameView);
-
     }
 }

@@ -12,7 +12,7 @@ public class Parser {
         query = query.replace("\"", "");
         query = query.replace(",", "");
         query = query.replace(":", "");
-        System.out.println(query);
+        //System.out.println(query);
         String[] values = query.split(" ");
 
         for (int x = 0; x < values.length - 1; x++) {

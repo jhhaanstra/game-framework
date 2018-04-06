@@ -50,6 +50,7 @@ public abstract class SimpleGameController {
                 ClientCommands.sendMove(i);
                 gameModel.incrementTurn();
                 gameModel.updatePlayField(i);
+                updateGame();
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
@@ -82,9 +83,14 @@ public abstract class SimpleGameController {
     }
 
     public void updateGame() {
+        if (gameModel.isYourTurn()) {
+            gameView.setTurn(Player.getInstance().getName());
+            gameModel.setYourTurn(false);
+        } else {
+            gameView.setTurn(gameModel.getOpponent());
+            gameModel.setYourTurn(true);
+        }
         gameView.setGrid(generateGrid(gameModel.getPlayField()));
-        if (gameModel.isYourTurn()) gameView.setTurn(Player.getInstance().getName());
-        else gameView.setTurn(gameModel.getOpponent());
     }
 
     public void getScore() {
@@ -113,12 +119,14 @@ public abstract class SimpleGameController {
 
     class MoveListener implements Runnable {
         boolean running = true;
+
         @Override
         public void run() {
             while(running) {
                 if (!Client.getInstance().getMoves().empty()) {
                     HashMap info = Parser.parse(Client.getInstance().getMoves());
                     // Laat de AI op de movestack pushen...
+                    System.out.println(info);
                     gameModel.updatePlayField(Integer.valueOf((String) info.get("MOVE")));
                     Platform.runLater(() -> {
                         updateGame();

@@ -50,16 +50,5 @@ public class Client extends Server {
     public Stack<String> getMoves() { return moves; }
 
     public Stack<String> getScore() { return score; }
-
-    @Override
-    protected String getIP() {
-        return ip;
-    }
-
-    @Override
-    protected int getPort() {
-        return port;
-    }
-
 }
 

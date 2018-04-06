@@ -11,15 +11,15 @@ public class GameSelectController {
     public GameSelectController(Stage primaryStage) {
         view = new GameSelectView();
         view.getTttButton().setOnMouseClicked(e -> {
-            ClientCommands.subscribeGame("Tic-tac-toe");
             Player.getInstance().setGame("Tic-tac-toe");
+            ClientCommands.subscribeGame("Tic-tac-toe");
             new GameStartController(primaryStage);
             primaryStage.show();
         });
 	
         view.getReversiButton().setOnMouseClicked(e -> {
-            ClientCommands.subscribeGame("Reversi");
             Player.getInstance().setGame("Reversi");
+            ClientCommands.subscribeGame("Reversi");
             new GameStartController(primaryStage);
             primaryStage.show();
         });

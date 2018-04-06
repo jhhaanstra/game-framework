@@ -22,6 +22,7 @@ public abstract class Server {
 
     public void send(String data) {
         try {
+            System.out.println("C: " + data);
             connThread.out.println(data);
         } catch (Exception e) {
             System.out.println("Zenden wil niet..");
@@ -33,11 +34,7 @@ public abstract class Server {
         connThread.socket.close();
     }
 
-    protected abstract String getIP();
-    protected abstract int getPort();
-
     private class ConnectionThread extends Thread {
-
         private Socket socket;
         private PrintWriter out;
 
