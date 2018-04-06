@@ -14,9 +14,9 @@ import javafx.scene.layout.GridPane;
 
 public class GameLobbyView extends Scene {
     private GridPane pane;
-    private TextArea textArea;
     private Button startButton;
     private Button challengeButton;
+    private Button refreshButton;
     private ListView<String> playerList = new ListView<>();
     ObservableList<String> lobbyData = FXCollections.observableArrayList();
     private String challengePlayer;
@@ -28,11 +28,13 @@ public class GameLobbyView extends Scene {
         pane.setVgap(5.5);
         pane.setAlignment(Pos.CENTER);
         pane.add(new Label("Online players"), 0, 0);
-        /*textArea = new TextArea();
-        textArea.setStyle("-fx-control-inner-background:#f2f2f2; -fx-font-family: Tahoma;");
-        pane.add(textArea, 0, 1);*/
+
         startButton = new Button("Start Game");
         pane.add(startButton, 0 , 2);
+
+        refreshButton = new Button("Refresh lobby");
+        pane.add(refreshButton, 1, 2);
+
         challengeButton = new Button("Challenge");
         pane.add(challengeButton, 0 , 3);
 
@@ -61,12 +63,13 @@ public class GameLobbyView extends Scene {
 
     public Button getChallengeButton() { return challengeButton; }
 
-    public TextArea getTextArea() { return textArea; }
-
     public ListView getListView() { return playerList; }
 
     public ObservableList getList() { return lobbyData; }
 
     public String getPlayer() { return challengePlayer; }
 
+    public Button getRefreshButton() {
+        return refreshButton;
+    }
 }

@@ -1,35 +1,33 @@
 package models;
 
-public class ClientCommands {
-
-
-    public String login(String name) {
+public abstract class ClientCommands {
+    public static String login(String name) {
         Client.getInstance().send("login " + name);
         return getReturnMessage();
     }
 
-    public String subscribeGame(String game) {
+    public static String subscribeGame(String game) {
         Client.getInstance().send("subscribe " + game);
         return getReturnMessage();
     }
 
-    public String getPlayers() {
+    public static String getPlayers() {
         Client.getInstance().send("get playerlist");
         return getInfo();
     }
 
-    public String challengePlayer(String player) {
+    public static String challengePlayer(String player) {
         System.out.println("challenge \"" + player.trim() + "\" \"Tic-tac-toe\"");
         Client.getInstance().send("challenge \"" + player.trim() + "\" \"Tic-tac-toe\"");
         return getReturnMessage();
     }
 
-    public String sendMove(int move) {
+    public static String sendMove(int move) {
         Client.getInstance().send("move " + move);
         return getInfo();
     }
 
-    public String getReturnMessage() {
+    public static String getReturnMessage() {
         try {
             Thread.sleep(100);
         } catch (InterruptedException e) {
@@ -41,7 +39,7 @@ public class ClientCommands {
         else return (String) Client.getInstance().getErorrs().pop();
     }
 
-    public String getInfo() {
+    public static String getInfo() {
         try {
             Thread.sleep(100);
         } catch (InterruptedException e) {

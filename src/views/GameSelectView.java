@@ -21,7 +21,7 @@ public class GameSelectView extends Scene {
         pane.add(new Label("Choose your game"), 0, 0);
         tttButton = new Button("TicTacToe");
         pane.add(tttButton, 0, 1);
-	reversiButton = new Button("Reversi");
+	    reversiButton = new Button("Reversi");
         pane.add(reversiButton, 0, 2);
         this.pane = pane;
     }

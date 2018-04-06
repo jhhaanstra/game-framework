@@ -5,7 +5,7 @@ import models.Client;
 
 public class Main extends Application {
     public void start(Stage primaryStage) {
-        LoginController controller = new LoginController(primaryStage);
+        new LoginController(primaryStage);
         primaryStage.show();
     }
 

@@ -6,7 +6,6 @@ import java.util.Stack;
 public class Parser {
 
     public static HashMap parse(Stack stack) {
-
         HashMap info = new HashMap();
         String query = stack.pop().toString();
         query = query.substring(1, query.length() - 1);
@@ -23,7 +22,5 @@ public class Parser {
         }
 
         return info;
-
     }
-
 }

@@ -8,7 +8,6 @@ import javafx.application.Platform;
 import javafx.stage.Stage;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -22,35 +21,35 @@ import java.util.*;
 
 public abstract class SimpleGameController {
     protected Game gameModel;
-    protected int size;
     protected GameView gameView;
-    protected HashMap gameInfo;
-    protected ArrayList<Rectangle> listRectangles;
-    protected ArrayList<Label> labels;
     protected String opponent;
     protected Stage primaryStage;
 
-    ClientCommands commands = new ClientCommands();
-
-    public SimpleGameController(Game model, Stage primaryStage, GameView gameView, HashMap info, int size) {
+    public SimpleGameController(Game model, Stage primaryStage, GameView gameView, HashMap info) {
         gameModel = model;
+        gameModel.setOpponent((String) info.get("OPPONENT")); // Misschien handig voor in de toekomst, kan anders wel weg..
+        gameView.setOpponent((String) info.get("OPPONENT"));
+
+        if (info.get("PLAYERTOMOVE").equals(Player.getInstance().getName()))
+            gameModel.setYourTurn(true);
+        else
+            gameModel.setYourTurn(false);
+
         this.gameView = gameView;
-	this.size = size;
-        this.gameInfo = info;
         this.primaryStage = primaryStage;
-        gameView.setGrid(generateGrid(gameModel.getPlayField()));
-        new Thread(new checkMoves()).start();
+        new Thread(new MoveListener()).start();
         primaryStage.setScene(this.gameView);
     }
 
     protected void setOnClick(int i) {
-        Rectangle r = listRectangles.get(i);
+        Rectangle r = (Rectangle) gameView.getGrid().getChildren().get(i);
         r.setOnMouseClicked(e -> {
             r.setFill(Color.RED);
             try {
-                System.out.println(commands.sendMove(i));
+                //System.out.println(ClientCommands.sendMove(i));
+                ClientCommands.sendMove(i);
                 gameModel.incrementTurn();
-                gameModel.updatePlayField(i, (gameModel.getTurn() % 2 == 0));
+                gameModel.updatePlayField(i);
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
@@ -60,31 +59,10 @@ public abstract class SimpleGameController {
 
     protected GridPane generateGrid(int[] playField) {
         GridPane grid = new GridPane();
-        listRectangles = new ArrayList<>();
-        labels = new ArrayList<>();
-        Iterator it = gameInfo.entrySet().iterator();
-        int count = 9;
-        Label player = new Label("NAME: ");
-        Label name = new Label(Player.getInstance().getName());
-        grid.add(player, 0, count);
-        grid.add(name, 1, count);
-        count++;
-        while(it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-            Label info = new Label(pair.getKey().toString());
-            Label value = new Label(pair.getValue().toString());
-            labels.add(value);
-            grid.add(info, 0, count);
-            grid.add(value, 1, count);
-            System.out.println(pair.getKey() + " = " + pair.getValue());
-            count++;
-        }
-        opponent = gameInfo.get("OPPONENT").toString();
-
         for (int y = 0; y < gameModel.getGridHeight(); y++) {
             for (int x = 0; x < gameModel.getGridWidth(); x++) {
-                int index = (y * size) + x;
-                Rectangle r = new Rectangle(100, 100);
+                int index = (y * gameModel.getGridWidth()) + x;
+                Rectangle r = new Rectangle(50, 50);
                 switch (playField[index]) {
                     case 0:
                         r.setFill(Color.WHITE);
@@ -97,37 +75,16 @@ public abstract class SimpleGameController {
                         break;
                 }
                 r.setStroke(Color.BLACK);
-                listRectangles.add(r);
-
                 grid.add(r, x, y);
             }
         }
         return grid;
     }
 
-    protected boolean legalMove(int index) {
-        return true;
-    }
-
     public void updateGame() {
         gameView.setGrid(generateGrid(gameModel.getPlayField()));
-    }
-
-    public void updateView() {
-
-    }
-
-    public void fillRectangle(int index) {
-        listRectangles.get(index).setFill(Color.BLUE);
-        listRectangles.get(index).setDisable(true);
-        System.out.println("Vakje " + index + " gekleurd voor de tegenstander.");
-    }
-
-
-    public void updateTurn(String name) {
-        Platform.runLater(() ->{
-            labels.get(0).setText(name);
-        });
+        if (gameModel.isYourTurn()) gameView.setTurn(Player.getInstance().getName());
+        else gameView.setTurn(gameModel.getOpponent());
     }
 
     public void getScore() {
@@ -145,29 +102,27 @@ public abstract class SimpleGameController {
             alert.setContentText("You can back to the game select room.");
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.OK){
-                GameSelectController controller = new GameSelectController(primaryStage);
+                new GameSelectController(primaryStage);
             }
         });
     }
 
+    protected boolean legalMove(int index) {
+        return gameModel.isYourTurn() && gameModel.getPlayField()[index] == 0;
+    }
 
-    class checkMoves implements Runnable {
-
+    class MoveListener implements Runnable {
         boolean running = true;
-
-
         @Override
         public void run() {
             while(running) {
-                if (Client.getInstance().getMoves().size() > 0) {
+                if (!Client.getInstance().getMoves().empty()) {
                     HashMap info = Parser.parse(Client.getInstance().getMoves());
-
-                    if(!Player.getInstance().getName().equals(info.get("PLAYER").toString())) {
-                        fillRectangle(Integer.valueOf((String) info.get("MOVE")));
-                        updateTurn(Player.getInstance().getName());
-                    } else {
-                        updateTurn(opponent);
-                    }
+                    // Laat de AI op de movestack pushen...
+                    gameModel.updatePlayField(Integer.valueOf((String) info.get("MOVE")));
+                    Platform.runLater(() -> {
+                        updateGame();
+                    });
                 }
                 if (Client.getInstance().getScore().size() > 0) {
                     getScore();

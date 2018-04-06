@@ -8,8 +8,8 @@ import java.util.HashMap;
 
 public class TicTacToeController extends SimpleGameController {
 
-    public TicTacToeController(Game model, Stage primaryStage, GameView gameView, HashMap info, int type) {
-        super(model, primaryStage, gameView, info, type);
+    public TicTacToeController(Game model, Stage primaryStage, GameView gameView, HashMap info) {
+        super(model, primaryStage, gameView, info);
         updateGame();
     }
 
@@ -21,15 +21,12 @@ public class TicTacToeController extends SimpleGameController {
 
     public void updateGame() {
         super.updateGame();
-        for (int i = 0; i < listRectangles.size(); i++) {
+        for (int i = 0; i < gameView.getGrid().getChildren().size(); i++) {
             if (legalMove(i)) {
                 setOnClick(i);
             }
         }
-    }
+        primaryStage.setScene(this.gameView);
 
-    public void updateView() {
-        super.updateView();
-        // Update je score
     }
 }
