@@ -40,3 +40,7 @@ out/
 # Gradle
 .idea/**/gradle.xml
 .idea/**/libraries
+/project2.3/nbproject/private/
+/projectGameClient/nbproject/private/
+/projectGameClient/build/
+/projectGameClient/refersi/nbproject/private/

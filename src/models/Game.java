@@ -59,6 +59,10 @@ public class Game {
             return playField[index];
         }
     }
+    
+    public void setPlayFieldAtIndex(int index, int person){
+        playField[index] = person;
+    }
 
     public void setYourTurn(boolean yourTurn) {
         System.out.println("your turn is now: " + yourTurn);

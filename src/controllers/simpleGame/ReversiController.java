@@ -10,7 +10,12 @@ public class ReversiController extends SimpleGameController{
 
 public ReversiController(Game model, Stage primaryStage, GameView gameView, HashMap info) {
         super(model, primaryStage, gameView, info);
+        gameModel.setPlayFieldAtIndex(27, 1);
+        gameModel.setPlayFieldAtIndex(28, 2);
+        gameModel.setPlayFieldAtIndex(35, 2);
+        gameModel.setPlayFieldAtIndex(36, 1);
 	primaryStage.setTitle("Reversi!");
+        updateGame();
 	//gameModel = Game.getInstance();
     }
 

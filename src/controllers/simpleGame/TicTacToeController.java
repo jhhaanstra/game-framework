@@ -10,6 +10,7 @@ public class TicTacToeController extends SimpleGameController {
 
     public TicTacToeController(Game model, Stage primaryStage, GameView gameView, HashMap info) {
         super(model, primaryStage, gameView, info);
+        primaryStage.setTitle("Tic-Tac-Toe!");
         updateGame();
     }
 
