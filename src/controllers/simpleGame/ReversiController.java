@@ -20,7 +20,7 @@ public ReversiController(Game model, Stage primaryStage, GameView gameView, Hash
     }
 
    public boolean legalMove(int index) {
-        if (super.legalMove(index))
+        if (super.legalMove(index) && nextToEnemy(index))
             return true;
         return false;
     }
@@ -34,16 +34,35 @@ public ReversiController(Game model, Stage primaryStage, GameView gameView, Hash
         }
     }
     
-    public boolean nextTooEnemy(int index){
-        if(gameModel.getPlayFieldAtIndex(index + 1) == 2) return true;
-        else if(gameModel.getPlayFieldAtIndex(index - 1) == 2) return true;
-        else if(gameModel.getPlayFieldAtIndex(index + 8) == 2) return true;
-        else if(gameModel.getPlayFieldAtIndex(index - 8) == 2) return true;
-        else if(gameModel.getPlayFieldAtIndex(index + 7) == 2) return true;
-        else if(gameModel.getPlayFieldAtIndex(index - 7) == 2) return true;
-        else if(gameModel.getPlayFieldAtIndex(index + 9) == 2) return true;
-        else if(gameModel.getPlayFieldAtIndex(index - 9) == 2) return true;
-        else return false;
+    public boolean nextToEnemy(int index){
+    return gameModel.getPlayFieldAtIndex(index + 1) == 2 || 
+            gameModel.getPlayFieldAtIndex(index - 1) == 2 ||
+            gameModel.getPlayFieldAtIndex(index + 8) == 2 ||
+            gameModel.getPlayFieldAtIndex(index - 8) == 2 ||
+            gameModel.getPlayFieldAtIndex(index + 7) == 2 ||
+            gameModel.getPlayFieldAtIndex(index - 7) == 2 ||
+            gameModel.getPlayFieldAtIndex(index + 9) == 2 ||
+            gameModel.getPlayFieldAtIndex(index - 9) == 2;
 
+    }
+    
+    
+    
+    public boolean friendlyInLine(int index){
+    checkDiagonal(index);
+    checkVertical(index);
+    checkHorizontal(index);   
+    }
+    
+    public boolean checkDiagonal(index){
+        
+    }
+    
+    public boolean checkVertical(index) {
+    
+    }
+    
+    public boolean checkHorizontal(index) {
+        
     }
 }
