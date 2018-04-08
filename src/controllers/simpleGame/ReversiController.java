@@ -14,9 +14,9 @@ public ReversiController(Game model, Stage primaryStage, GameView gameView, Hash
         gameModel.setPlayFieldAtIndex(28, 2);
         gameModel.setPlayFieldAtIndex(35, 2);
         gameModel.setPlayFieldAtIndex(36, 1);
-	primaryStage.setTitle("Reversi!");
-        updateGame();
-	//gameModel = Game.getInstance();
+        primaryStage.setTitle("Reversi!");
+            updateGame();
+        //gameModel = Game.getInstance();
     }
 
    public boolean legalMove(int index) {
@@ -48,7 +48,7 @@ public ReversiController(Game model, Stage primaryStage, GameView gameView, Hash
     
     
     
-    public boolean friendlyInLine(int index){
+    /*public boolean friendlyInLine(int index){
     checkDiagonal(index);
     checkVertical(index);
     checkHorizontal(index);   
@@ -64,5 +64,5 @@ public ReversiController(Game model, Stage primaryStage, GameView gameView, Hash
     
     public boolean checkHorizontal(index) {
         
-    }
+    }*/
 }
