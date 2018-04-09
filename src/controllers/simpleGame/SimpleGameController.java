@@ -67,16 +67,16 @@ public abstract class SimpleGameController {
                 Rectangle r = new Rectangle(50, 50);
                 switch (playField[index]) {
                     case 0:
-                        r.setFill(Color.WHITE);
+                        r.setFill(Color.GREEN);
                         break;
                     case 1:
-                        r.setFill(Color.BLUE);
+                        r.setFill(Color.WHITE);
                         break;
                     case 2:
-                        r.setFill(Color.RED);
+                        r.setFill(Color.BLACK);
                         break;
                 }
-                r.setStroke(Color.BLACK);
+                r.setStroke(Color.RED);
                 grid.add(r, x, y);
             }
         }

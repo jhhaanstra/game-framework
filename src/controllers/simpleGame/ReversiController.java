@@ -47,7 +47,7 @@ public ReversiController(Game model, Stage primaryStage, GameView gameView, Hash
     }
     
     
-    
+    /**
     public boolean friendlyInLine(int index){
     checkDiagonal(index);
     checkVertical(index);
@@ -65,4 +65,5 @@ public ReversiController(Game model, Stage primaryStage, GameView gameView, Hash
     public boolean checkHorizontal(index) {
         
     }
+     */
 }

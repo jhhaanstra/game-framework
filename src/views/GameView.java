@@ -17,7 +17,7 @@ public class GameView extends Scene {
 
         // Create Scoreboard
         GridPane score = new GridPane();
-        score.setPrefSize(500,500);
+        //score.setPrefSize(500,500); // added width and height
         score.add(new Label("Naam: "), 0, 0);
         score.add(new Label(Player.getInstance().getName()), 1, 0);
 
@@ -27,7 +27,7 @@ public class GameView extends Scene {
         score.add(new Label("Aan de beurt: "), 0, 2);
         score.add(turn, 1, 2);
         pane.setTop(score);
-
+        pane.setPrefSize(500,500);
         pane.setCenter(new GridPane());
     }
 
