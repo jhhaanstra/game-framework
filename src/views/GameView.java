@@ -17,6 +17,7 @@ public class GameView extends Scene {
 
         // Create Scoreboard
         GridPane score = new GridPane();
+        score.setPrefSize(500,500);
         score.add(new Label("Naam: "), 0, 0);
         score.add(new Label(Player.getInstance().getName()), 1, 0);
 
