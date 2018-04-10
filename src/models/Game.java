@@ -1,5 +1,7 @@
 package models;
 
+import java.util.List;
+
 public class Game {
     private int turn;
     private boolean yourTurn;
@@ -74,5 +76,9 @@ public class Game {
 
     public void updatePlayField(int index) {
         playField[index] = (isYourTurn()) ? 1 : 2;
+    }
+
+    public void updatePlayField(List indexes) {
+        indexes.forEach(e -> { playField[(int) e] = (isYourTurn()) ? 1 : 2; });
     }
 }

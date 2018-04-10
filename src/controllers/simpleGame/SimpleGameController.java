@@ -46,6 +46,7 @@ public abstract class SimpleGameController {
         r.setOnMouseClicked(e -> {
             try {
                 //System.out.println(ClientCommands.sendMove(i));
+                System.out.println(legalMove(i));
                 gameModel.updatePlayField(i);
                 ClientCommands.sendMove(i);
                 gameModel.incrementTurn();
@@ -70,10 +71,10 @@ public abstract class SimpleGameController {
                         r.setFill(Color.GREEN);
                         break;
                     case 1:
-                        r.setFill(Color.WHITE);
+                        r.setFill(Color.BLACK);
                         break;
                     case 2:
-                        r.setFill(Color.BLACK);
+                        r.setFill(Color.WHITE);
                         break;
                 }
                 r.setStroke(Color.RED);
