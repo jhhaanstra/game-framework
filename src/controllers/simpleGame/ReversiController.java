@@ -1,9 +1,6 @@
 package controllers.simpleGame;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import javafx.application.Platform;
 import javafx.scene.paint.Color;
@@ -18,15 +15,9 @@ import views.GameView;
 
 public class ReversiController extends SimpleGameController{
     //private Game gameModel;
-    int[] positionsArr = {-9, -8, -7 , -1, 1, 7, 8, 9};
-    int[] positionLeft = {-8, -7, 1, 8, 9};
-    int[] positionRight = {-9, -8, -1, 7, 8};
-    int[] zero = {1, 8, 9};
-    int[] fiftysix = {1, -8, -7};
-    int[] seven = {-1, 7, 8};
-    int[] lowestboundary = {7, 8, 9, -1 , 1};
-    int[] sixtythree = {-1, -9, -8};
-    int[] highestBoundary = {-1, -9, -8, -7, 1};
+    int[] directions = {-9, -8, -7, -1, 1, 7, 8, 9};
+    int[] leftDir = {-9, -1, 7, -8, 8};
+    int[] rightDir = {-7, 1, 9, -8, 8};
 
     private int opponentNumber;
 
@@ -54,122 +45,31 @@ public ReversiController(Game model, Stage primaryStage, GameView gameView, Hash
         new Thread(new MoveListener()).start();
 	    primaryStage.setTitle("Reversi!");
         updateGame();
-	//gameModel = Game.getInstance();
     }
 
    public List getMovesList(int index) {
     //System.out.println("Dit is de waarde: " + index);
-        if (super.legalMove(index)) {
-            List toChange = new ArrayList();
-            try {
-                if (gameModel.getPlayField()[index - 9]  == (gameModel.isYourTurn() ? 2 : 1)) {
-                    //System.out.println(-9);
-                    toChange.addAll(checkDir(-9, index));
-                }
-            } catch (ArrayIndexOutOfBoundsException e) {}
-            try {
-                if (gameModel.getPlayField()[index - 8] == (gameModel.isYourTurn() ? 2 : 1)) {
-                    //System.out.println(-8);
-                    toChange.addAll(checkDir(-8, index));
-                }
-            } catch (ArrayIndexOutOfBoundsException e) {}
-            try {
-                if (gameModel.getPlayField()[index - 7] == (gameModel.isYourTurn() ? 2 : 1)) {
-                    //System.out.println(-7);
-                    toChange.addAll(checkDir(-7, index));
-                }
-            } catch (ArrayIndexOutOfBoundsException e) {}
-            try {
-                if (gameModel.getPlayField()[index - 1] == (gameModel.isYourTurn() ? 2 : 1)) {
-                    //System.out.println(-1);
-                    toChange.addAll(checkDir(-1, index));
-                }
-            } catch (ArrayIndexOutOfBoundsException e) {}
-            try {
-                if (gameModel.getPlayField()[index + 1] == (gameModel.isYourTurn() ? 2 : 1)) {
-                    //System.out.println(1);
-                    toChange.addAll(checkDir(1, index));
-                }
-            } catch (ArrayIndexOutOfBoundsException e) {}
-            try {
-                if (gameModel.getPlayField()[index + 7] == (gameModel.isYourTurn() ? 2 : 1)) {
-                    //System.out.println(7);
-                    toChange.addAll(checkDir(7, index));
-                }
-            } catch (ArrayIndexOutOfBoundsException e) {}
-            try {
-                if (gameModel.getPlayField()[index + 8] == (gameModel.isYourTurn() ? 2 : 1)) {
-                    //System.out.println(8);
-                    toChange.addAll(checkDir(8, index));
-                }
-            } catch (ArrayIndexOutOfBoundsException e) {}
-            try {
-                if (gameModel.getPlayField()[index + 9] == (gameModel.isYourTurn() ? 2 : 1)) {
-                    //out.println(9);
-                    toChange.addAll(checkDir(9, index));
-                }
-            } catch (ArrayIndexOutOfBoundsException e) {}
-
-            return toChange;
+       List toChange = new ArrayList();
+       if (super.legalMove(index)) {
+            for (int i : directions) {
+                try {
+                    if (gameModel.getPlayField()[index + i] == (gameModel.isYourTurn() ? 2 : 1))
+                        toChange.addAll(checkDir(i, index));
+                } catch (ArrayIndexOutOfBoundsException e) {}
+            }
 
         }
-
-       return new ArrayList();
-    }
+       return toChange;
+   }
 
     public List getMoveReceivesList(int index) {
         List toChange = new ArrayList();
-        try {
-            if (gameModel.getPlayField()[index - 9]  == (gameModel.isYourTurn() ? 2 : 1)) {
-                //System.out.println(-9);
-                toChange.addAll(checkDir(-9, index));
+            for (int i : directions) {
+                try {
+                    if (gameModel.getPlayField()[index + i] == (gameModel.isYourTurn() ? 2 : 1))
+                        toChange.addAll(checkDir(i, index));
+                } catch (ArrayIndexOutOfBoundsException e) {}
             }
-        } catch (ArrayIndexOutOfBoundsException e) {}
-        try {
-            if (gameModel.getPlayField()[index - 8] == (gameModel.isYourTurn() ? 2 : 1)) {
-               // System.out.println(-8);
-                toChange.addAll(checkDir(-8, index));
-            }
-        } catch (ArrayIndexOutOfBoundsException e) {}
-        try {
-            if (gameModel.getPlayField()[index - 7] == (gameModel.isYourTurn() ? 2 : 1)) {
-               // System.out.println(-7);
-                toChange.addAll(checkDir(-7, index));
-            }
-        } catch (ArrayIndexOutOfBoundsException e) {}
-        try {
-            if (gameModel.getPlayField()[index - 1] == (gameModel.isYourTurn() ? 2 : 1)) {
-               // System.out.println(-1);
-                toChange.addAll(checkDir(-1, index));
-            }
-        } catch (ArrayIndexOutOfBoundsException e) {}
-        try {
-            if (gameModel.getPlayField()[index + 1] == (gameModel.isYourTurn() ? 2 : 1)) {
-               // System.out.println(1);
-                toChange.addAll(checkDir(1, index));
-            }
-        } catch (ArrayIndexOutOfBoundsException e) {}
-        try {
-            if (gameModel.getPlayField()[index + 7] == (gameModel.isYourTurn() ? 2 : 1)) {
-                //System.out.println(7);
-                toChange.addAll(checkDir(7, index));
-            }
-        } catch (ArrayIndexOutOfBoundsException e) {}
-        try {
-            if (gameModel.getPlayField()[index + 8] == (gameModel.isYourTurn() ? 2 : 1)) {
-                //System.out.println(8);
-                toChange.addAll(checkDir(8, index));
-            }
-        } catch (ArrayIndexOutOfBoundsException e) {}
-        try {
-            if (gameModel.getPlayField()[index + 9] == (gameModel.isYourTurn() ? 2 : 1)) {
-                //System.out.println(9);
-                toChange.addAll(checkDir(9, index));
-            }
-        } catch (ArrayIndexOutOfBoundsException e) {}
-
-        //}
-
         return toChange;
     }
 
@@ -204,188 +104,30 @@ public ReversiController(Game model, Stage primaryStage, GameView gameView, Hash
     }
 
     public Set getPossibleList() {
-        int current;
+        Set check = new HashSet();
         for (int item : occupied) {
-            if (item == 0 ) {
-                for (int x = 0; x < zero.length; x++) {
-                    current = item + zero[x];
-                    if (gameModel.getPlayField()[current] == 0) {
-                        check.add(current);
-                    }
+            if (item % 8 == 0) {
+                for (int i : rightDir) {
+                    try {
+                        if (gameModel.getPlayField()[item + i] == 0) check.add(item + i);
+                    } catch (ArrayIndexOutOfBoundsException e) {}
                 }
-            } else if (item == 7) {
-                for (int x = 0; x < seven.length; x++) {
-                    current = item + seven[x];
-                    if (gameModel.getPlayField()[current] == 0) {
-                        check.add(current);
-                    }
-                }
-            } else if (item == 56) {
-                for (int x = 0; x < fiftysix.length; x++) {
-                    current = item + fiftysix[x];
-                    if (gameModel.getPlayField()[current] == 0) {
-                        check.add(current);
-                    }
-                }
-            } else if (item == 63) {
-                for (int x = 0; x < sixtythree.length; x++) {
-                    current = item + sixtythree[x];
-                    if (gameModel.getPlayField()[current] == 0) {
-                        check.add(current);
-                    }
-                }
-            } else if(item > 0 && item < 7) {
-                for (int x = 0; x < lowestboundary.length; x++) {
-                    current = item + lowestboundary[x];
-                    if (gameModel.getPlayField()[current] == 0) {
-                        check.add(current);
-                    }
-                }
-            } else if (item > 56 && item < 63) {
-                for (int x = 0; x < highestBoundary.length; x++) {
-                    current = item + highestBoundary[x];
-                    if (gameModel.getPlayField()[current] == 0) {
-                        check.add(current);
-                    }
-                }
-            } else if (item % 8 == 0) {
-                for (int x = 0; x < positionLeft.length; x++) {
-                    current = item + positionLeft[x];
-                    if (gameModel.getPlayField()[current] == 0) {
-                        check.add(current);
-                    }
-                }
-            } else if ((item + 1) % 8 == 0) {
-                for (int x = 0; x < positionRight.length; x++) {
-                    current = item + positionRight[x];
-                    if (gameModel.getPlayField()[current] == 0) {
-                        check.add(current);
-                    }
+            } else if (item + 1 % 8 == 0) {
+                for (int i : leftDir) {
+                    try {
+                        if (gameModel.getPlayField()[item + i] == 0) check.add(item + i);
+                    } catch (ArrayIndexOutOfBoundsException e) {}
                 }
             } else {
-                for (int x = 0; x < positionsArr.length; x++) {
-                    current = item + positionsArr[x];
-                    if (gameModel.getPlayField()[current] == 0) {
-                        if (current >= 0 && current <= 63) {
-                            check.add(current);
-                        }
-                    }
+                for (int i : directions) {
+                    try {
+                        if (gameModel.getPlayField()[item + i] == 0) check.add(item + i);
+                    } catch (ArrayIndexOutOfBoundsException e) {}
                 }
             }
         }
         possMoves.addAll(check);
         return check;
-    }
-
-    public List stripPossibleList() {
-
-        int count = 0;
-        int current;
-        for (int i = 0; i < possMoves.size(); i++) {
-            current = possMoves.get(i);
-            if (current >= 0 && current <= 63) {
-                if (current == 0) {
-                    int test = current;
-                    for (int x = 0; x < zero.length; x++) {
-                        current = test;
-                        current += zero[x];
-                        if (gameModel.getPlayField()[current] == (gameModel.isYourTurn() ? 2 : 1)) {
-                            count++;
-                        }
-                    }
-                } else if (current == 7) {
-                    int test = current;
-                    for (int x = 0; x < seven.length; x++) {
-                        current = test;
-                        current += seven[x];
-                        if (gameModel.getPlayField()[current] == (gameModel.isYourTurn() ? 2 : 1)) {
-                            count++;
-                        }
-                    }
-                }
-                else if (current == 56) {
-                    int test = current;
-                    for (int x = 0; x < fiftysix.length; x++) {
-                        current = test;
-                        current += fiftysix[x];
-                        if (gameModel.getPlayField()[current] == (gameModel.isYourTurn() ? 2 : 1)) {
-                            count++;
-                        }
-                    }
-                }
-                else if (current == 63) {
-                    int test = current;
-                    for (int x = 0; x < sixtythree.length; x++) {
-                        current = test;
-                        current += sixtythree[x];
-                        if (gameModel.getPlayField()[current] == (gameModel.isYourTurn() ? 2 : 1)) {
-                            count++;
-                        }
-                    }
-                }
-                else if(current > 0 && current < 7) {
-                    int test = current;
-                    for (int x = 0; x < lowestboundary.length; x++) {
-                        current = test;
-                        current += lowestboundary[x];
-                        if (gameModel.getPlayField()[current] == (gameModel.isYourTurn() ? 2 : 1)) {
-                            count++;
-                        }
-                    }
-                } else if (current > 56 && current < 63) {
-                    int test = current;
-                    for (int x = 0; x < highestBoundary.length; x++) {
-                        current = test;
-                        current += highestBoundary[x];
-                        if (gameModel.getPlayField()[current] == (gameModel.isYourTurn() ? 2 : 1)) {
-                            count++;
-                        }
-                    }
-                } else if (current % 8 == 0) {
-                    int test = current;
-                    for (int x = 0; x < positionLeft.length; x++) {
-                        current = test;
-                        current += positionLeft[x];
-                        if (gameModel.getPlayField()[current] == (gameModel.isYourTurn() ? 2 : 1)) {
-                            count++;
-                        }
-                    }
-                } else if ((current + 1) % 8 == 0) {
-                    int test = current;
-                    for (int x = 0; x < positionRight.length; x++) {
-                        current = test;
-                        current += positionRight[x];
-                        if (gameModel.getPlayField()[current] == (gameModel.isYourTurn() ? 2 : 1)) {
-                            count++;
-                        }
-                    }
-                } else {
-                    int test = current;
-                    for (int x = 0; x < positionsArr.length; x++) {
-                        current = test;
-                        current = possMoves.get(i) - positionsArr[x];
-                        if (gameModel.getPlayField()[current] == (gameModel.isYourTurn() ? 2 : 1)) {
-                            count++;
-                        }
-                    }
-                }
-            }
-
-
-            if (count == 0) {
-                possMoves.remove(possMoves.get(i));
-            }
-            count = 0;
-        }
-        /*System.out.println();
-        System.out.println("PRINT ALLE MOVES");
-        for (int i = 0; i < possMoves.size(); i++) {
-            if (gameModel.isYourTurn()) {
-                System.out.print(possMoves.get(i) + " , ");
-            }
-        }*/
-
-        return possMoves;
     }
 
     private List checkDir(int dir, int current) {
@@ -408,25 +150,12 @@ public ReversiController(Game model, Stage primaryStage, GameView gameView, Hash
         return new ArrayList();
     }
 
-    private void switchDir(int dir, int current) throws ArrayIndexOutOfBoundsException {
-
-    }
-
-    public void checkLeftDir() {
-
-    }
-
-    public void checkRightDir() {
-
-    }
-
     public void updateGame() {
         super.updateGame();
 
         if (gameModel.isYourTurn()) {
             Platform.runLater(() -> {
                 getPossibleList();
-                stripPossibleList();
 
                 for (int i = 0; i < possMoves.size(); i++) {
                     List toChange = getMovesList(possMoves.get(i));
@@ -441,7 +170,6 @@ public ReversiController(Game model, Stage primaryStage, GameView gameView, Hash
 
 
     }
-
 
     class MoveListener implements Runnable {
         boolean running = true;
