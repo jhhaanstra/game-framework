@@ -32,9 +32,10 @@ public ReversiController(Game model, Stage primaryStage, GameView gameView, Hash
     public void updateGame() {
         super.updateGame();
         for (int i = 0; i < gameView.getGrid().getChildren().size(); i++) {
-            if (legalMove(i)) {
+            //if (legalMove(i)) {
+		//System.out.println("roep legal move aan");
                 setOnClick(i);
-            }
+            //}
         }
     }
     
@@ -67,8 +68,9 @@ public ReversiController(Game model, Stage primaryStage, GameView gameView, Hash
     }
     
     
-    
+  
     public boolean friendlyInLine(int index){
+	System.out.println("ik ben hier");
 	if(directions.contains("WEST") || directions.contains("EAST")){
 	     return checkHorizontal(index);
 	}
@@ -83,6 +85,7 @@ public ReversiController(Game model, Stage primaryStage, GameView gameView, Hash
     }
     
     public boolean checkDiagonal(int index){
+	System.out.println("ik ben hier2");
         int current = index;
 	if(directions.contains("SOUTH-WEST")){
 	    try{
@@ -163,6 +166,7 @@ public ReversiController(Game model, Stage primaryStage, GameView gameView, Hash
     }
     
     public boolean checkVertical(int index) {
+	System.out.println("ik ben hier3");
         int current = index;
         if (directions.contains("NORTH")) {
             try {
@@ -206,6 +210,7 @@ public ReversiController(Game model, Stage primaryStage, GameView gameView, Hash
     
     // 8, 9, 10, 11, 12, 13, 14, 15
     public boolean checkHorizontal(int index) {
+	System.out.println("ik ben hier4");
 	int current = index;
 	if(directions.contains("WEST")){
 	    while(!(current % 8 == 0)){
@@ -238,4 +243,5 @@ public ReversiController(Game model, Stage primaryStage, GameView gameView, Hash
 	} 
 	return !(changeindex.isEmpty());
     }
+
 }

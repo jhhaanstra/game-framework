@@ -51,7 +51,7 @@ public abstract class SimpleGameController {
                 gameModel.incrementTurn();
                 gameView.setTurn(gameModel.getOpponent());
                 gameModel.setYourTurn(false);
-                updateGame();
+		updateGame();
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
