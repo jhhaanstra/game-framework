@@ -24,6 +24,9 @@ public abstract class SimpleGameController {
     protected GameView gameView;
     protected String opponent;
     protected Stage primaryStage;
+    List<Integer> occupied = new ArrayList<>();
+    List<Integer> possMoves = new ArrayList<>();
+    Set<Integer> check = new HashSet<>();
 
     public SimpleGameController(Game model, Stage primaryStage, GameView gameView, HashMap info) {
         gameModel = model;
@@ -37,21 +40,29 @@ public abstract class SimpleGameController {
 
         this.gameView = gameView;
         this.primaryStage = primaryStage;
-        new Thread(new MoveListener()).start();
+/*        new Thread(new MoveListener()).start();*/
         primaryStage.setScene(this.gameView);
     }
 
     protected void setOnClick(int i) {
         Rectangle r = (Rectangle) gameView.getGrid().getChildren().get(i);
+
+        if (!occupied.contains(i)) {
+            r.setFill(Color.YELLOW);
+        }
+
         r.setOnMouseClicked(e -> {
             try {
-                //System.out.println(ClientCommands.sendMove(i));
+                System.out.println(ClientCommands.sendMove(i));
+                System.out.println(legalMove(i));
                 gameModel.updatePlayField(i);
-                ClientCommands.sendMove(i);
+                //ClientCommands.sendMove(i);
                 gameModel.incrementTurn();
                 gameView.setTurn(gameModel.getOpponent());
                 gameModel.setYourTurn(false);
+                occupied.add(i);
                 updateGame();
+                possMoves.clear();
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
@@ -67,16 +78,16 @@ public abstract class SimpleGameController {
                 Rectangle r = new Rectangle(50, 50);
                 switch (playField[index]) {
                     case 0:
-                        r.setFill(Color.WHITE);
+                        r.setFill(Color.GREEN);
                         break;
                     case 1:
-                        r.setFill(Color.BLUE);
+                        r.setFill(Color.BLACK);
                         break;
                     case 2:
-                        r.setFill(Color.RED);
+                        r.setFill(Color.WHITE);
                         break;
                 }
-                r.setStroke(Color.BLACK);
+                r.setStroke(Color.RED);
                 grid.add(r, x, y);
             }
         }

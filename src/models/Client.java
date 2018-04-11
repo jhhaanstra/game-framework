@@ -21,7 +21,10 @@ public class Client extends Server {
                 if (data.contains("ERR")) errors.push(data);
                 if (data.contains("SVR")) info.push(data);
                 if (data.contains("SVR GAME MATCH")) match.push("{" + data.split("\\{")[1]);
-                if (data.contains("SVR GAME MOVE")) moves.push("{" + data.split("\\{")[1]);
+                if (data.contains("SVR GAME MOVE")) {
+                    moves.push("{" + data.split("\\{")[1]);
+                    //System.out.println(data);
+                }
                 if (data.contains("WIN") | data.contains("DRAW") | data.contains("LOSS")) score.push(data);
                 System.out.println(data); // test
             }));

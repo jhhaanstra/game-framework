@@ -1,5 +1,7 @@
 package models;
 
+import java.util.List;
+
 public class Game {
     private int turn;
     private boolean yourTurn;
@@ -16,8 +18,15 @@ public class Game {
         this.playField = new int[gridWidth * gridHeight];
 
         // Test :)
-        //int[] playField = {1, 0, 2, 0, 0, 2, 1, 0, 1};
-        //this.playField = playField;
+        /*int[] playField = {0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 1, 1, 1, 0, 0, 0, 0,
+                0, 0, 0, 2, 1, 0, 0, 0,
+                0, 0, 2, 2, 2, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0 };
+        this.playField = playField;*/
     }
 
     public void setOpponent(String opponent) {
@@ -74,5 +83,9 @@ public class Game {
 
     public void updatePlayField(int index) {
         playField[index] = (isYourTurn()) ? 1 : 2;
+    }
+
+    public void updatePlayField(List indexes) {
+        indexes.forEach(e -> { playField[(int) e] = (isYourTurn()) ? 1 : 2; });
     }
 }
