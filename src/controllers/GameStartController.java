@@ -30,9 +30,6 @@ public class GameStartController {
 
         stage = primaryStage;
 
-        view.getStartButton().setOnMouseClicked(e -> {
-           // Start een game..
-        });
 
         view.getChallengeButton().setOnMouseClicked(e -> {
             ClientCommands.challengePlayer(view.getPlayer(), Player.getInstance().getGame());

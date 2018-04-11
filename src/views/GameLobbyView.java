@@ -29,9 +29,6 @@ public class GameLobbyView extends Scene {
         pane.setAlignment(Pos.CENTER);
         pane.add(new Label("Online players"), 0, 0);
 
-        startButton = new Button("Start Game");
-        pane.add(startButton, 0 , 2);
-
         refreshButton = new Button("Refresh lobby");
         pane.add(refreshButton, 1, 2);
 
