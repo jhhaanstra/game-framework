@@ -135,17 +135,22 @@ public ReversiController(Game model, Stage primaryStage, GameView gameView, Hash
             ArrayList series = new ArrayList();
             current += dir;
             int currentValue = gameModel.getPlayField()[current];
-            //System.out.println(current + " wordt vergeleken met " + currentValue);
-            while (currentValue == (gameModel.isYourTurn() ? 2 : 1) && current % 8 != 0 && (current + 1) % 8 != 0) {
-                series.add(current);
-                current += dir;
-                currentValue = gameModel.getPlayField()[current];
-                //System.out.println(current + " wordt vergeleken met " + currentValue);
+            while (currentValue == (gameModel.isYourTurn() ? 2 : 1)) {
+                if (current % 8 == 0 || (current + 1) % 8 == 0) {
+                    if (dir == 8 || dir == -8) {
+                        series.add(current);
+                        current += dir;
+                        currentValue = gameModel.getPlayField()[current];
+                    } else
+                        break;
+                } else {
+                    series.add(current);
+                    current += dir;
+                    currentValue = gameModel.getPlayField()[current];
+                }
             }
-            //System.out.println(current + " wordt vergeleken met " + currentValue);
-            if (gameModel.getPlayField()[current] == (gameModel.isYourTurn() ? 1 : 2)) {
+            if (gameModel.getPlayField()[current] == (gameModel.isYourTurn() ? 1 : 2))
                 return series;
-            }
         } catch (ArrayIndexOutOfBoundsException e) {}
         return new ArrayList();
     }
