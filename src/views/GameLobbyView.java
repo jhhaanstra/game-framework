@@ -33,7 +33,7 @@ public class GameLobbyView extends Scene {
         pane.add(refreshButton, 1, 2);
 
         challengeButton = new Button("Challenge");
-        pane.add(challengeButton, 0 , 3);
+        pane.add(challengeButton, 0 , 2);
 
         ListView<String> listView = new ListView<>(lobbyData);
         listView.setPrefSize(200, 250);
