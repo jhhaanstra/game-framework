@@ -25,8 +25,8 @@ public abstract class SimpleGameController {
     protected GameView gameView;
     protected String opponent;
     protected Stage primaryStage;
-    protected Color startColor;
-    protected Color oponentColor;
+    protected static Color startColor;
+    protected static Color oponentColor;
     List<Integer> occupied = new ArrayList<>();
     List<Integer> possMoves = new ArrayList<>();
     Set<Integer> check = new HashSet<>();
@@ -52,6 +52,9 @@ public abstract class SimpleGameController {
 	    startColor = Color.BLACK;
 	    oponentColor = Color.WHITE;
 	}
+	
+	GameView.setStartColor(startColor);
+	GameView.setOpponentColor(oponentColor);
     }
 
     protected void setOnClick(int i) {
@@ -161,5 +164,13 @@ public abstract class SimpleGameController {
                 }
             }
         }
+    }
+    
+    public static Color getStartColor(){
+	return startColor;
+    }
+    
+    public static Color getOpponentColor(){
+	return oponentColor;
     }
 }
