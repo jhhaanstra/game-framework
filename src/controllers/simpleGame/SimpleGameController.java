@@ -40,7 +40,6 @@ public abstract class SimpleGameController {
 
         this.gameView = gameView;
         this.primaryStage = primaryStage;
-/*        new Thread(new MoveListener()).start();*/
         primaryStage.setScene(this.gameView);
     }
 

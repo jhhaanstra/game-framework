@@ -171,10 +171,8 @@ public class ReversiController extends SimpleGameController {
             Platform.runLater(() -> {
                 getPossibleList();
                     for (int i = 0; i < possMoves.size(); i++) {
-                    System.out.println("Hij doet helemaal niks!!");
                     List toChange = getMovesList(possMoves.get(i));
                     if (!toChange.isEmpty()) {
-                        System.out.println("Weer niks");
                         ClientCommands.sendMove(possMoves.get(i));
                         updateGameState(possMoves.get(i), toChange);
                         gameView.setTurn(gameModel.getOpponent());
@@ -222,6 +220,9 @@ public class ReversiController extends SimpleGameController {
             while(running) {
                 if (!Client.getInstance().getMoves().empty()) {
                     HashMap info = Parser.parse(Client.getInstance().getMoves());
+                    System.out.println("New Move");
+                    System.out.println(info);
+                    System.out.println("==================");
                     if (!info.get("PLAYER").equals(Player.getInstance().getName())) {
                         Platform.runLater(() -> {
                             int index = Integer.valueOf((String) info.get("MOVE"));
