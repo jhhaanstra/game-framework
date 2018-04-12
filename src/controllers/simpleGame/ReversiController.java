@@ -1,9 +1,11 @@
 package controllers.simpleGame;
 
-import java.util.*;
 import javafx.application.Platform;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+
+import java.util.*;
+
 import javafx.stage.Stage;
 import lib.Parser;
 import models.Client;
@@ -237,5 +239,4 @@ public class ReversiController extends SimpleGameController {
             }
         }
     }
-
 }

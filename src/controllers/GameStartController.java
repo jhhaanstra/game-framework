@@ -98,9 +98,9 @@ public class GameStartController {
             while (running) {
                 Platform.runLater(() -> {
                     try {
-			if (!Client.getInstance().getChallenge().isEmpty()) {			    
-			    challengeAlert();
-			}
+                        if (!Client.getInstance().getChallenge().isEmpty()) {
+                            challengeAlert();
+                        }
                         if (!Client.getInstance().getMatch().isEmpty()) {
                             running = false;
                             // Dit kan misschien weg, we weten nog niet of de server ook daadwerkelijk reversi stuurt als je ingeschreven staat op TicTacToe en vice versa...
