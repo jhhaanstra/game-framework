@@ -12,15 +12,17 @@ import models.Game;
 import models.Player;
 import views.GameView;
 
-public class ReversiController extends SimpleGameController{
+public class ReversiController extends SimpleGameController {
     //private Game gameModel;
     int[] directions = {-9, -8, -7, -1, 1, 7, 8, 9};
     int[] leftDir = {-9, -1, 7, -8, 8};
     int[] rightDir = {-7, 1, 9, -8, 8};
-
+    int[] startPos = {27, 36, 35, 28};
     private int opponentNumber;
+    private ArrayList<Integer> moves = new ArrayList<>();
+    private HashMap<Integer, List> save = new HashMap<>();
 
-public ReversiController(Game model, Stage primaryStage, GameView gameView, HashMap info) {
+    public ReversiController(Game model, Stage primaryStage, GameView gameView, HashMap info) {
         super(model, primaryStage, gameView, info);
         if (!gameModel.isYourTurn()) {
             gameModel.setPlayFieldAtIndex(27, 1);
@@ -42,14 +44,14 @@ public ReversiController(Game model, Stage primaryStage, GameView gameView, Hash
             occupied.add(36);
         }
         new Thread(new MoveListener()).start();
-	    primaryStage.setTitle("Reversi!");
+        primaryStage.setTitle("Reversi!");
         updateGame();
     }
 
-   public List getMovesList(int index) {
-    //System.out.println("Dit is de waarde: " + index);
-       List toChange = new ArrayList();
-       if (super.legalMove(index)) {
+    public List getMovesList(int index) {
+        //System.out.println("Dit is de waarde: " + index);
+        List toChange = new ArrayList();
+        if (super.legalMove(index)) {
             for (int i : directions) {
                 try {
                     if (gameModel.getPlayField()[index + i] == (gameModel.isYourTurn() ? 2 : 1))
@@ -57,17 +59,17 @@ public ReversiController(Game model, Stage primaryStage, GameView gameView, Hash
                 } catch (ArrayIndexOutOfBoundsException e) {}
             }
         }
-       return toChange;
-   }
+        return toChange;
+    }
 
     public List getMoveReceivesList(int index) {
         List toChange = new ArrayList();
-            for (int i : directions) {
-                try {
-                    if (gameModel.getPlayField()[index + i] == (gameModel.isYourTurn() ? 2 : 1))
-                        toChange.addAll(checkDir(i, index));
-                } catch (ArrayIndexOutOfBoundsException e) {}
-            }
+        for (int i : directions) {
+            try {
+                if (gameModel.getPlayField()[index + i] == (gameModel.isYourTurn() ? 2 : 1))
+                    toChange.addAll(checkDir(i, index));
+            } catch (ArrayIndexOutOfBoundsException e) {}
+        }
         return toChange;
     }
 
@@ -99,6 +101,15 @@ public ReversiController(Game model, Stage primaryStage, GameView gameView, Hash
         gameModel.setYourTurn(true);
         updateGame();
         possMoves.clear();
+    }
+
+    public void updateGameStateAI(int i, List toChange) {
+        System.out.println("Test");
+
+        ClientCommands.sendMove(i);
+        updateGameState(i, toChange);
+        gameView.setTurn(gameModel.getOpponent());
+        gameModel.setYourTurn(false);
     }
 
     public Set getPossibleList() {
@@ -159,20 +170,49 @@ public ReversiController(Game model, Stage primaryStage, GameView gameView, Hash
         if (gameModel.isYourTurn()) {
             Platform.runLater(() -> {
                 getPossibleList();
+                    for (int i = 0; i < possMoves.size(); i++) {
+                    System.out.println("Hij doet helemaal niks!!");
+                    List toChange = getMovesList(possMoves.get(i));
+                    if (!toChange.isEmpty()) {
+                        System.out.println("Weer niks");
+                        ClientCommands.sendMove(possMoves.get(i));
+                        updateGameState(possMoves.get(i), toChange);
+                        gameView.setTurn(gameModel.getOpponent());
+                        gameModel.setYourTurn(false);
+                        break;
+                        //setOnClick(possMoves.get(i), toChange);
+                    }
+                }
+                check.clear();
+                possMoves.clear();
+            });
+        }
+    }
+
+    public void setHasHMap(int index, List toChange) {
+        save.put(index, toChange);
+    }
+
+    public void updateGameAI() {
+        super.updateGame();
+        System.out.println("My turn");
+        if (gameModel.isYourTurn()) {
+            Platform.runLater(() -> {
+                getPossibleList();
 
                 for (int i = 0; i < possMoves.size(); i++) {
                     List toChange = getMovesList(possMoves.get(i));
                     if (!toChange.isEmpty()) {
-                        setOnClick(possMoves.get(i), toChange);
+                        //setOnClick(possMoves.get(i), toChange);
+                        setHasHMap(possMoves.get(i), toChange);
                     }
                 }
-            check.clear();
-            possMoves.clear();
+                check.clear();
+                possMoves.clear();
             });
         }
-
-
     }
+
 
     class MoveListener implements Runnable {
         boolean running = true;
@@ -189,10 +229,11 @@ public ReversiController(Game model, Stage primaryStage, GameView gameView, Hash
                         });
                     }
                 }
-                if (Client.getInstance().getScore().size() > 0) {
-                    getScore();
-                    running = false;
-                }
+            }
+
+            if (Client.getInstance().getScore().size() > 0) {
+                getScore();
+                running = false;
             }
         }
     }
