@@ -15,6 +15,9 @@ import views.GameLobbyView;
 import views.TicTacToeView;
 
 import java.util.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 
 public class GameStartController {
     private GameLobbyView view;
@@ -27,13 +30,10 @@ public class GameStartController {
 
         stage = primaryStage;
 
-        view.getStartButton().setOnMouseClicked(e -> {
-           // Start een game..
-        });
 
         view.getChallengeButton().setOnMouseClicked(e -> {
-            ClientCommands.challengePlayer(view.getPlayer());
-            //System.out.println(ClientCommands.challengePlayer(view.getPlayer()));
+            ClientCommands.challengePlayer(view.getPlayer(), Player.getInstance().getGame());
+            //System.out.println(ClientCommands.challengePlayer(view.getPlayer(), Player.getInstance().getGame()));
         });
 
         view.getRefreshButton().setOnMouseClicked(e -> {
@@ -75,6 +75,21 @@ public class GameStartController {
             view.getList().add(name.replace("\"", "") + "\n");
         }
     }
+    
+     public void challengeAlert() {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(AlertType.INFORMATION);
+            HashMap info = Parser.parse(Client.getInstance().getChallenge());
+            //String response = Client.getInstance().getChallenges().pop();
+            alert.setTitle(info.get("CHALLENGER").toString() + " challenges you");
+            alert.setHeaderText(info.get("CHALLENGER").toString() + " challenges you for " + info.get("GAMETYPE"));
+            alert.setContentText("If you want to accept click ok");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK){
+                Client.getInstance().send("challenge accept " + info.get("CHALLENGENUMBER"));
+            }
+        });
+    } 
 
     class LobbyListener implements Runnable {
         private boolean running = true;
@@ -83,6 +98,9 @@ public class GameStartController {
             while (running) {
                 Platform.runLater(() -> {
                     try {
+			if (!Client.getInstance().getChallenge().isEmpty()) {			    
+			    challengeAlert();
+			}
                         if (!Client.getInstance().getMatch().isEmpty()) {
                             running = false;
                             // Dit kan misschien weg, we weten nog niet of de server ook daadwerkelijk reversi stuurt als je ingeschreven staat op TicTacToe en vice versa...

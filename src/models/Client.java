@@ -12,6 +12,7 @@ public class Client extends Server {
     private static Stack<String> info = new Stack<>();
     private static Stack<String> match = new Stack<>();
     private static Stack<String> moves = new Stack<>();
+    private static Stack<String> challenge = new Stack<>();
     private static Stack<String> score = new Stack<>();
 
 
@@ -25,6 +26,7 @@ public class Client extends Server {
                     moves.push("{" + data.split("\\{")[1]);
                     //System.out.println(data);
                 }
+        		if (data.contains("SVR GAME CHALLENGE")) challenge.push("{" + data.split("\\{")[1]);
                 if (data.contains("WIN") | data.contains("DRAW") | data.contains("LOSS")) score.push(data);
                 System.out.println(data); // test
             }));
@@ -51,6 +53,8 @@ public class Client extends Server {
     }
 
     public Stack<String> getMoves() { return moves; }
+    
+    public Stack<String> getChallenge() { return challenge; }
 
     public Stack<String> getScore() { return score; }
 }

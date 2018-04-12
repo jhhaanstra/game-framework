@@ -230,11 +230,11 @@ public class ReversiController extends SimpleGameController {
                     }
                 }
             }
-
             if (Client.getInstance().getScore().size() > 0) {
                 getScore();
                 running = false;
             }
         }
     }
+
 }
