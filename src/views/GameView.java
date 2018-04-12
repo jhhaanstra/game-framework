@@ -4,12 +4,15 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.geometry.Insets;
+import javafx.scene.layout.HBox;
 import models.Player;
 
 public class GameView extends Scene {
     BorderPane pane;
     Label opponent = new Label();
     Label turn = new Label();
+
 
     public GameView() {
         super(new BorderPane());
@@ -26,9 +29,13 @@ public class GameView extends Scene {
 
         score.add(new Label("Aan de beurt: "), 0, 2);
         score.add(turn, 1, 2);
+        HBox hbox = new HBox(8);
+        hbox.getChildren().add(new Label("Footer Tekst"));
+
         pane.setTop(score);
         pane.setPrefSize(500,500);
         pane.setCenter(new GridPane());
+        pane.setBottom(hbox);
     }
 
     public void setGrid(GridPane grid) {

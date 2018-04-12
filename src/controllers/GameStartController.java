@@ -33,7 +33,7 @@ public class GameStartController {
 
         view.getChallengeButton().setOnMouseClicked(e -> {
             ClientCommands.challengePlayer(view.getPlayer());
-            //System.out.println(ClientCommands.challengePlayer(view.getPlayer()));
+            System.out.println(ClientCommands.challengePlayer(view.getPlayer()));
         });
 
         view.getRefreshButton().setOnMouseClicked(e -> {
@@ -83,6 +83,7 @@ public class GameStartController {
             while (running) {
                 Platform.runLater(() -> {
                     try {
+
                         if (!Client.getInstance().getMatch().isEmpty()) {
                             running = false;
                             // Dit kan misschien weg, we weten nog niet of de server ook daadwerkelijk reversi stuurt als je ingeschreven staat op TicTacToe en vice versa...
