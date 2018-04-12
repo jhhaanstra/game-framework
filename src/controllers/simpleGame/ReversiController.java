@@ -1,7 +1,6 @@
 package controllers.simpleGame;
 
 import java.util.*;
-
 import javafx.application.Platform;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -57,7 +56,6 @@ public ReversiController(Game model, Stage primaryStage, GameView gameView, Hash
                         toChange.addAll(checkDir(i, index));
                 } catch (ArrayIndexOutOfBoundsException e) {}
             }
-
         }
        return toChange;
    }
@@ -198,7 +196,4 @@ public ReversiController(Game model, Stage primaryStage, GameView gameView, Hash
             }
         }
     }
-    
-
-
 }
