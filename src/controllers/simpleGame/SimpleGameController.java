@@ -18,12 +18,15 @@ import views.GameView;
 import javafx.scene.control.Alert.AlertType;
 
 import java.util.*;
+import javafx.scene.shape.Circle;
 
 public abstract class SimpleGameController {
     protected Game gameModel;
     protected GameView gameView;
     protected String opponent;
     protected Stage primaryStage;
+    protected static Color startColor;
+    protected static Color oponentColor;
     List<Integer> occupied = new ArrayList<>();
     List<Integer> possMoves = new ArrayList<>();
     Set<Integer> check = new HashSet<>();
@@ -41,6 +44,17 @@ public abstract class SimpleGameController {
         this.gameView = gameView;
         this.primaryStage = primaryStage;
         primaryStage.setScene(this.gameView);
+	
+	if(!gameModel.isYourTurn()){
+	    startColor = Color.WHITE;
+	    oponentColor = Color.BLACK;
+	} else {
+	    startColor = Color.BLACK;
+	    oponentColor = Color.WHITE;
+	}
+	
+	GameView.setStartColor(startColor);
+	GameView.setOpponentColor(oponentColor);
     }
 
     protected void setOnClick(int i) {
@@ -75,19 +89,24 @@ public abstract class SimpleGameController {
             for (int x = 0; x < gameModel.getGridWidth(); x++) {
                 int index = (y * gameModel.getGridWidth()) + x;
                 Rectangle r = new Rectangle(50, 50);
+		Circle c = new Circle(25);
                 switch (playField[index]) {
                     case 0:
                         r.setFill(Color.GREEN);
+			c.setFill(Color.TRANSPARENT);
                         break;
                     case 1:
-                        r.setFill(Color.BLACK);
+                        r.setFill(Color.GREEN);
+			c.setFill(oponentColor);
                         break;
                     case 2:
-                        r.setFill(Color.WHITE);
+                        r.setFill(Color.GREEN);
+			c.setFill(startColor);
                         break;
                 }
                 r.setStroke(Color.RED);
                 grid.add(r, x, y);
+		grid.add(c, x, y);
             }
         }
         return grid;
@@ -145,5 +164,13 @@ public abstract class SimpleGameController {
                 }
             }
         }
+    }
+    
+    public static Color getStartColor(){
+	return startColor;
+    }
+    
+    public static Color getOpponentColor(){
+	return oponentColor;
     }
 }

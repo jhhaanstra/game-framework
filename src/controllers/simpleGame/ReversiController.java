@@ -26,7 +26,7 @@ public class ReversiController extends SimpleGameController {
 
     public ReversiController(Game model, Stage primaryStage, GameView gameView, HashMap info) {
         super(model, primaryStage, gameView, info);
-        if (!gameModel.isYourTurn()) {
+       if (!gameModel.isYourTurn()) {
             gameModel.setPlayFieldAtIndex(27, 1);
             occupied.add(27);
             gameModel.setPlayFieldAtIndex(28, 2);
