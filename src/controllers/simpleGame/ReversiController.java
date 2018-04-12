@@ -6,10 +6,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import lib.Parser;
-import models.Client;
-import models.ClientCommands;
-import models.Game;
-import models.Player;
+import models.*;
 import views.GameView;
 
 public class ReversiController extends SimpleGameController {
@@ -17,9 +14,7 @@ public class ReversiController extends SimpleGameController {
     int[] directions = {-9, -8, -7, -1, 1, 7, 8, 9};
     int[] leftDir = {-9, -1, 7, -8, 8};
     int[] rightDir = {-7, 1, 9, -8, 8};
-    int[] startPos = {27, 36, 35, 28};
-    private int opponentNumber;
-    private ArrayList<Integer> moves = new ArrayList<>();
+    private ArrayList<Integer> choices = new ArrayList<>();
     private HashMap<Integer, List> save = new HashMap<>();
 
     public ReversiController(Game model, Stage primaryStage, GameView gameView, HashMap info) {
@@ -103,15 +98,6 @@ public class ReversiController extends SimpleGameController {
         possMoves.clear();
     }
 
-    public void updateGameStateAI(int i, List toChange) {
-        System.out.println("Test");
-
-        ClientCommands.sendMove(i);
-        updateGameState(i, toChange);
-        gameView.setTurn(gameModel.getOpponent());
-        gameModel.setYourTurn(false);
-    }
-
     public Set getPossibleList() {
         Set check = new HashSet();
         for (int item : occupied) {
@@ -169,46 +155,47 @@ public class ReversiController extends SimpleGameController {
 
         if (gameModel.isYourTurn()) {
             Platform.runLater(() -> {
-                getPossibleList();
+                if (Settings.getInstance().getAI()) {
+                    getPossibleList();
                     for (int i = 0; i < possMoves.size(); i++) {
-                    List toChange = getMovesList(possMoves.get(i));
-                    if (!toChange.isEmpty()) {
-                        ClientCommands.sendMove(possMoves.get(i));
-                        updateGameState(possMoves.get(i), toChange);
+                        List toChange = getMovesList(possMoves.get(i));
+                        if (!toChange.isEmpty()) {
+                            setHasHMap(possMoves.get(i), toChange);
+                            choices.add(possMoves.get(i));
+                        }
+                    }
+                    if (!choices.isEmpty()) {
+                        Random rand = new Random();
+                        int x = rand.nextInt(choices.size());
+                        System.out.println("This is the random number " + x);
+                        ClientCommands.sendMove(choices.get(x));
+                        updateGameState(choices.get(x), save.get(choices.get(x)));
                         gameView.setTurn(gameModel.getOpponent());
                         gameModel.setYourTurn(false);
-                        break;
-                        //setOnClick(possMoves.get(i), toChange);
+                    }
+
+                    save.clear();
+                    choices.clear();
+                } else {
+                    getPossibleList();
+                    for (int i = 0; i < possMoves.size(); i++) {
+                        List toChange = getMovesList(possMoves.get(i));
+                        if (!toChange.isEmpty()) {
+                            setOnClick(possMoves.get(i), toChange);
+                        }
                     }
                 }
+
                 check.clear();
                 possMoves.clear();
             });
         }
+
     }
+
 
     public void setHasHMap(int index, List toChange) {
         save.put(index, toChange);
-    }
-
-    public void updateGameAI() {
-        super.updateGame();
-        System.out.println("My turn");
-        if (gameModel.isYourTurn()) {
-            Platform.runLater(() -> {
-                getPossibleList();
-
-                for (int i = 0; i < possMoves.size(); i++) {
-                    List toChange = getMovesList(possMoves.get(i));
-                    if (!toChange.isEmpty()) {
-                        //setOnClick(possMoves.get(i), toChange);
-                        setHasHMap(possMoves.get(i), toChange);
-                    }
-                }
-                check.clear();
-                possMoves.clear();
-            });
-        }
     }
 
 
@@ -230,11 +217,13 @@ public class ReversiController extends SimpleGameController {
                         });
                     }
                 }
+
+                if (Client.getInstance().getScore().size() > 0) {
+                    getScore();
+                    running = false;
+                }
             }
-            if (Client.getInstance().getScore().size() > 0) {
-                getScore();
-                running = false;
-            }
+
         }
     }
 

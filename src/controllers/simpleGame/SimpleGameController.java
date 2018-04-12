@@ -43,6 +43,16 @@ public abstract class SimpleGameController {
         primaryStage.setScene(this.gameView);
     }
 
+    public void move(int i) {
+        gameModel.updatePlayField(i);
+        ClientCommands.sendMove(i);
+        gameModel.incrementTurn();
+        gameView.setTurn(gameModel.getOpponent());
+        gameModel.setYourTurn(false);
+        updateGame();
+
+    }
+
     protected void setOnClick(int i) {
         Rectangle r = (Rectangle) gameView.getGrid().getChildren().get(i);
 
@@ -93,6 +103,10 @@ public abstract class SimpleGameController {
         return grid;
     }
 
+    public Game getGameModel() {
+        return gameModel;
+    }
+
     public void updateGame() {
         gameView.setGrid(generateGrid(gameModel.getPlayField()));
     }
@@ -117,8 +131,14 @@ public abstract class SimpleGameController {
         });
     }
 
+
+
     protected boolean legalMove(int index) {
         return gameModel.isYourTurn() && gameModel.getPlayField()[index] == 0;
+    }
+
+    public boolean legalMove(int index, int[] playfield) {
+        return gameModel.isYourTurn() && playfield[index] == 0;
     }
 
     class MoveListener implements Runnable {
