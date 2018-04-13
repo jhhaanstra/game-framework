@@ -165,11 +165,25 @@ public class ReversiController extends SimpleGameController {
                         }
                     }
                     if (!choices.isEmpty()) {
-                        Random rand = new Random();
-                        int x = rand.nextInt(choices.size());
-                        System.out.println("This is the random number " + x);
-                        ClientCommands.sendMove(choices.get(x));
-                        updateGameState(choices.get(x), save.get(choices.get(x)));
+                        if (choices.contains(0)) {
+                            ClientCommands.sendMove(0);
+                            updateGameState(0, save.get(0));
+                        } else if (choices.contains(7)) {
+                            ClientCommands.sendMove(7);
+                            updateGameState(7, save.get(7));
+                        } else if (choices.contains(56)) {
+                            ClientCommands.sendMove(56);
+                            updateGameState(56, save.get(56));
+                        } else if (choices.contains(63)) {
+                            ClientCommands.sendMove(63);
+                            updateGameState(63, save.get(63));
+                        } else {
+                            Random rand = new Random();
+                            int x = rand.nextInt(choices.size());
+                            System.out.println("This is the random number " + x);
+                            ClientCommands.sendMove(choices.get(x));
+                            updateGameState(choices.get(x), save.get(choices.get(x)));
+                        }
                         gameView.setTurn(gameModel.getOpponent());
                         gameModel.setYourTurn(false);
                     }
@@ -184,6 +198,8 @@ public class ReversiController extends SimpleGameController {
                             setOnClick(possMoves.get(i), toChange);
                         }
                     }
+                    Player.getInstance().setTurn(false);
+                    System.out.println("De beurt is " + Player.getInstance().getTurn());
                 }
 
                 check.clear();
@@ -214,6 +230,11 @@ public class ReversiController extends SimpleGameController {
                         Platform.runLater(() -> {
                             int index = Integer.valueOf((String) info.get("MOVE"));
                             updateGameState(index, getMoveReceivesList(index));
+                            try {
+                                Thread.sleep(500);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                         });
                     }
                 }

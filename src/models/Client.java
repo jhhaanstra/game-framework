@@ -3,6 +3,7 @@ package models;
 import java.util.Stack;
 import java.util.function.Consumer;
 import controllers.*;
+import javafx.application.Platform;
 
 public class Client extends Server {
     private static Client client;
@@ -26,7 +27,11 @@ public class Client extends Server {
                 if (data.contains("SVR GAME MOVE")) moves.push("{" + data.split("\\{")[1]);
         		if (data.contains("SVR GAME CHALLENGE")) challenge.push("{" + data.split("\\{")[1]);
                 if (data.contains("WIN") | data.contains("DRAW") | data.contains("LOSS")) score.push(data);
-                if (data.contains("YOURTURN")) turn.push(data);
+                if (data.contains("YOURTURN")) {
+                    turn.push(data);
+                    Player.getInstance().setTurn(true);
+                    System.out.println("De beurt is " + Player.getInstance().getTurn());
+                }
                 System.out.println(data); // test
             }));
         }

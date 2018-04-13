@@ -27,6 +27,8 @@ public abstract class SimpleGameController {
     List<Integer> occupied = new ArrayList<>();
     List<Integer> possMoves = new ArrayList<>();
     Set<Integer> check = new HashSet<>();
+    protected static Color startColor;
+    protected static Color oponentColor;
 
     public SimpleGameController(Game model, Stage primaryStage, GameView gameView, HashMap info) {
         gameModel = model;
@@ -40,6 +42,15 @@ public abstract class SimpleGameController {
 
         this.gameView = gameView;
         this.primaryStage = primaryStage;
+
+        if(!gameModel.isYourTurn()){
+            startColor = Color.WHITE;
+            oponentColor = Color.BLACK;
+        } else {
+            startColor = Color.BLACK;
+            oponentColor = Color.WHITE;
+        }
+
         primaryStage.setScene(this.gameView);
     }
 
@@ -90,10 +101,10 @@ public abstract class SimpleGameController {
                         r.setFill(Color.GREEN);
                         break;
                     case 1:
-                        r.setFill(Color.BLACK);
+                        r.setFill(startColor);
                         break;
                     case 2:
-                        r.setFill(Color.WHITE);
+                        r.setFill(oponentColor);
                         break;
                 }
                 r.setStroke(Color.RED);
@@ -166,4 +177,13 @@ public abstract class SimpleGameController {
             }
         }
     }
+
+    public static Color getStartColor(){
+        return startColor;
+    }
+
+    public static Color getOpponentColor(){
+        return oponentColor;
+    }
+
 }
