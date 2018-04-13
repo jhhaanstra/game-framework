@@ -45,7 +45,12 @@ public class AIController extends Thread{
             } else if (choices.contains(63)) {
                 ClientCommands.sendMove(63);
                 gameController.updateBoard(63, save.get(63));
-            } else {
+            }
+
+
+            // Hier moeten de andere functies komen, dus check inner 4 en check inner 16 bijv...
+
+            else {
                 Random rand = new Random();
                 int x = rand.nextInt(choices.size());
                 System.out.println("This is the random number " + x);
