@@ -63,7 +63,7 @@ public class GameStartController {
         HashMap gameInfo = getGameInfo();
         ReversiController reversi = new ReversiController(new Game(8, 8), stage, new ReversiView(), gameInfo);
         if (Settings.getInstance().getAI()) {
-            new AIController(reversi);
+            reversi.setAi(new AIController(reversi));
         }
     }
 

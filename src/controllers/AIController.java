@@ -7,9 +7,7 @@ import lib.GameStateNode;
 import models.ClientCommands;
 import models.Game;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class AIController extends Thread{
     private boolean playing = true;
@@ -22,56 +20,38 @@ public class AIController extends Thread{
         start();
     }
 
-    public void setGame(Game game) {
-        this.game = game;
-    }
+    public void doTurn() {
+        ArrayList<Integer> choices = new ArrayList<>();
+        HashMap<Integer, List> save = new HashMap<>();
 
-    public void calculateOptions(int[] playfield) {
-        boolean tempTurn = game.isYourTurn();
-        int turnCounter = game.getTurn();
-        GameStateNode currentNode = new GameStateNode(playfield);
-
-        for (int x = 0; x < playfield.length; x++) {
-            if (gameController.legalMove(playfield[x], currentNode.getPlayfield())) {
-                int[] temp = playfield;
-                temp[x] = (tempTurn) ? 1 : 2;
-                currentNode.addNode(x, new GameStateNode(temp));
+        Set<Integer> possMoves = gameController.getPossibleList();
+        for (int i : possMoves) {
+            List toChange = gameController.getMovesList(i);
+            if (!toChange.isEmpty()) {
+                save.put(i, toChange);
+                choices.add(i);
             }
         }
-
-        System.out.println(currentNode);
-    }
-
-    @Override
-    public void run() {
-        /*while (playing) {
-            if (game.isYourTurn()) {
-                gameController.updateGame();
-
-                if (game.isYourTurn()) {
-                    Platform.runLater(() -> {
-                        ArrayList<Integer> possMoves = new ArrayList(gameController.getPossibleList());
-                        for (int i = 0; i < possMoves.size(); i++) {
-                            List toChange = gameController.getMovesList(possMoves.get(i));
-                            if (!toChange.isEmpty()) {
-                                ClientCommands.sendMove(possMoves.get(i));
-                                gameController.updateGameState(possMoves.get(i), toChange);
-                                //gameView.setTurn(game.getOpponent());
-                                game.setYourTurn(false);
-                                break;
-                                //setOnClick(possMoves.get(i), toChange);
-                            }
-                        }
-                        //check.clear();
-                        possMoves.clear();
-                    });
-                }
+        if (!choices.isEmpty()) {
+            if (choices.contains(0)) {
+                ClientCommands.sendMove(0);
+                gameController.updateBoard(0, save.get(0));
+            } else if (choices.contains(7)) {
+                ClientCommands.sendMove(7);
+                gameController.updateBoard(7, save.get(7));
+            } else if (choices.contains(56)) {
+                ClientCommands.sendMove(56);
+                gameController.updateBoard(56, save.get(56));
+            } else if (choices.contains(63)) {
+                ClientCommands.sendMove(63);
+                gameController.updateBoard(63, save.get(63));
+            } else {
+                Random rand = new Random();
+                int x = rand.nextInt(choices.size());
+                System.out.println("This is the random number " + x);
+                ClientCommands.sendMove(choices.get(x));
+                gameController.updateBoard(choices.get(x), save.get(choices.get(x)));
             }
-
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {}
-
-        }*/
+        }
     }
 }

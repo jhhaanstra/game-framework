@@ -1,6 +1,8 @@
 package controllers.simpleGame;
 
 import java.util.*;
+
+import controllers.AIController;
 import javafx.application.Platform;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -14,8 +16,7 @@ public class ReversiController extends SimpleGameController {
     int[] directions = {-9, -8, -7, -1, 1, 7, 8, 9};
     int[] leftDir = {-9, -1, 7, -8, 8};
     int[] rightDir = {-7, 1, 9, -8, 8};
-    private ArrayList<Integer> choices = new ArrayList<>();
-    private HashMap<Integer, List> save = new HashMap<>();
+    private AIController ai;
 
     public ReversiController(Game model, Stage primaryStage, GameView gameView, HashMap info) {
         super(model, primaryStage, gameView, info);
@@ -125,6 +126,10 @@ public class ReversiController extends SimpleGameController {
         return check;
     }
 
+    public void setAi(AIController ai) {
+        this.ai = ai;
+    }
+
     private List checkDir(int dir, int current) {
         try {
             ArrayList series = new ArrayList();
@@ -160,40 +165,10 @@ public class ReversiController extends SimpleGameController {
         //if (gameModel.isYourTurn()) {
             Platform.runLater(() -> {
                 if (Settings.getInstance().getAI()) {
-                    getPossibleList();
-                    for (int i = 0; i < possMoves.size(); i++) {
-                        List toChange = getMovesList(possMoves.get(i));
-                        if (!toChange.isEmpty()) {
-                            setHasHMap(possMoves.get(i), toChange);
-                            choices.add(possMoves.get(i));
-                        }
-                    }
-                    if (!choices.isEmpty()) {
-                        if (choices.contains(0)) {
-                            ClientCommands.sendMove(0);
-                            updateBoard(0, save.get(0));
-                        } else if (choices.contains(7)) {
-                            ClientCommands.sendMove(7);
-                            updateBoard(7, save.get(7));
-                        } else if (choices.contains(56)) {
-                            ClientCommands.sendMove(56);
-                            updateBoard(56, save.get(56));
-                        } else if (choices.contains(63)) {
-                            ClientCommands.sendMove(63);
-                            updateBoard(63, save.get(63));
-                        } else {
-                            Random rand = new Random();
-                            int x = rand.nextInt(choices.size());
-                            System.out.println("This is the random number " + x);
-                            ClientCommands.sendMove(choices.get(x));
-                            updateBoard(choices.get(x), save.get(choices.get(x)));
-                        }
-                        gameView.setTurn(gameModel.getOpponent());
-                        gameModel.setYourTurn(false);
-                    }
-
-                    save.clear();
-                    choices.clear();
+                    while (ai == null) {}
+                    ai.doTurn();
+                    gameView.setTurn(gameModel.getOpponent());
+                    gameModel.setYourTurn(false);
                 } else {
                     getPossibleList();
                     for (int i = 0; i < possMoves.size(); i++) {
@@ -202,21 +177,11 @@ public class ReversiController extends SimpleGameController {
                             setOnClick(possMoves.get(i), toChange);
                         }
                     }
-
                 }
-
-                check.clear();
-                possMoves.clear();
             });
         //}
 
     }
-
-
-    public void setHasHMap(int index, List toChange) {
-        save.put(index, toChange);
-    }
-
 
     class MoveListener implements Runnable {
         boolean running = true;
