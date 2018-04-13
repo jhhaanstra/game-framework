@@ -21,26 +21,24 @@ public class ReversiController extends SimpleGameController {
         super(model, primaryStage, gameView, info);
         if (!gameModel.isYourTurn()) {
             gameModel.setPlayFieldAtIndex(27, 1);
-            occupied.add(27);
             gameModel.setPlayFieldAtIndex(28, 2);
-            occupied.add(28);
             gameModel.setPlayFieldAtIndex(35, 2);
-            occupied.add(35);
             gameModel.setPlayFieldAtIndex(36, 1);
-            occupied.add(36);
         } else {
             gameModel.setPlayFieldAtIndex(27, 2);
-            occupied.add(27);
             gameModel.setPlayFieldAtIndex(28, 1);
-            occupied.add(28);
             gameModel.setPlayFieldAtIndex(35, 1);
-            occupied.add(35);
             gameModel.setPlayFieldAtIndex(36, 2);
-            occupied.add(36);
         }
-        new Thread(new MoveListener()).start();
+
+        occupied.add(27);
+        occupied.add(28);
+        occupied.add(35);
+        occupied.add(36);
+
         primaryStage.setTitle("Reversi!");
-        updateGame();
+        super.updateGame();
+        new Thread(new MoveListener()).start();
     }
 
     public List getMovesList(int index) {
@@ -78,8 +76,8 @@ public class ReversiController extends SimpleGameController {
         r.setOnMouseClicked(e -> {
             try {
                 ClientCommands.sendMove(i);
-                updateGameState(i, toChange);
-                gameView.setTurn(gameModel.getOpponent());
+                updateBoard(i, toChange);
+                //gameView.setTurn(gameModel.getOpponent());
                 gameModel.setYourTurn(false);
             } catch (Exception e1) {
                 e1.printStackTrace();
@@ -88,13 +86,15 @@ public class ReversiController extends SimpleGameController {
         });
     }
 
-    public void updateGameState(int i, List toChange) {
+    public void updateBoard(int i, List toChange) {
         gameModel.updatePlayField(i);
         gameModel.updatePlayField(toChange);
         gameModel.incrementTurn();
         occupied.add(i);
-        gameModel.setYourTurn(true);
-        updateGame();
+        updateBoard2();
+        System.out.println("Hier ben ik");
+        /*gameModel.setYourTurn(true);
+        updateGame();*/
         possMoves.clear();
     }
 
@@ -150,10 +150,14 @@ public class ReversiController extends SimpleGameController {
         return new ArrayList();
     }
 
-    public void updateGame() {
+    public void updateBoard2() {
         super.updateGame();
+    }
 
-        if (gameModel.isYourTurn()) {
+    public void updateGame() {
+
+
+        //if (gameModel.isYourTurn()) {
             Platform.runLater(() -> {
                 if (Settings.getInstance().getAI()) {
                     getPossibleList();
@@ -167,22 +171,22 @@ public class ReversiController extends SimpleGameController {
                     if (!choices.isEmpty()) {
                         if (choices.contains(0)) {
                             ClientCommands.sendMove(0);
-                            updateGameState(0, save.get(0));
+                            updateBoard(0, save.get(0));
                         } else if (choices.contains(7)) {
                             ClientCommands.sendMove(7);
-                            updateGameState(7, save.get(7));
+                            updateBoard(7, save.get(7));
                         } else if (choices.contains(56)) {
                             ClientCommands.sendMove(56);
-                            updateGameState(56, save.get(56));
+                            updateBoard(56, save.get(56));
                         } else if (choices.contains(63)) {
                             ClientCommands.sendMove(63);
-                            updateGameState(63, save.get(63));
+                            updateBoard(63, save.get(63));
                         } else {
                             Random rand = new Random();
                             int x = rand.nextInt(choices.size());
                             System.out.println("This is the random number " + x);
                             ClientCommands.sendMove(choices.get(x));
-                            updateGameState(choices.get(x), save.get(choices.get(x)));
+                            updateBoard(choices.get(x), save.get(choices.get(x)));
                         }
                         gameView.setTurn(gameModel.getOpponent());
                         gameModel.setYourTurn(false);
@@ -198,14 +202,13 @@ public class ReversiController extends SimpleGameController {
                             setOnClick(possMoves.get(i), toChange);
                         }
                     }
-                    Player.getInstance().setTurn(false);
-                    System.out.println("De beurt is " + Player.getInstance().getTurn());
+
                 }
 
                 check.clear();
                 possMoves.clear();
             });
-        }
+        //}
 
     }
 
@@ -221,20 +224,21 @@ public class ReversiController extends SimpleGameController {
         @Override
         public void run() {
             while(running) {
-                if (!Client.getInstance().getMoves().empty()) {
-                    HashMap info = Parser.parse(Client.getInstance().getMoves());
-                    System.out.println("New Move");
-                    System.out.println(info);
-                    System.out.println("==================");
-                    if (!info.get("PLAYER").equals(Player.getInstance().getName())) {
+
+                if (Client.getInstance().getTurn().size() > 0) {
+                    if (Client.getInstance().getTurn().getFirst().contains("DETAILS")) {
+                        HashMap info = Parser.parse(Client.getInstance().getTurn());
+                        if (!info.get("PLAYER").equals(Player.getInstance().getName())) {
+                            Platform.runLater(() -> {
+                                int index = Integer.valueOf((String) info.get("MOVE"));
+                                updateBoard(index, getMoveReceivesList(index));
+                            });
+                        }
+                    } else {
+                        Client.getInstance().getTurn().removeFirst();
+                        gameModel.setYourTurn(true);
                         Platform.runLater(() -> {
-                            int index = Integer.valueOf((String) info.get("MOVE"));
-                            updateGameState(index, getMoveReceivesList(index));
-                            try {
-                                Thread.sleep(500);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
+                            updateGame();
                         });
                     }
                 }
@@ -243,6 +247,13 @@ public class ReversiController extends SimpleGameController {
                     getScore();
                     running = false;
                 }
+
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
             }
 
         }

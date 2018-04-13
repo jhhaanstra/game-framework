@@ -158,7 +158,7 @@ public abstract class SimpleGameController {
         @Override
         public void run() {
             while(running) {
-                if (!Client.getInstance().getMoves().empty()) {
+                if (Client.getInstance().getMoves().size() > 0) {
                     HashMap info = Parser.parse(Client.getInstance().getMoves());
                     if (!info.get("PLAYER").equals(Player.getInstance().getName())) {
                         // Laat de AI op de movestack pushen...

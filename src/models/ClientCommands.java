@@ -45,7 +45,7 @@ public abstract class ClientCommands {
     }
 
     public static String getInfo() {
-        while (Client.getInstance().getInfo().empty()) {}
+        while (Client.getInstance().getInfo().size() == 0) {}
         String message = Client.getInstance().getInfo().pop();
         System.out.println("S: " + message);
         return message;
