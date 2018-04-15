@@ -8,7 +8,7 @@ public class Game {
     private int gridWidth;
     private int gridHeight;
     private Player[] players;
-    private int[] playField;
+    private static int[] playField;
     private String opponent;
 
     public Game(int gridWidth, int gridHeight) {
@@ -18,8 +18,15 @@ public class Game {
         this.playField = new int[gridWidth * gridHeight];
 
         // Test :)
-        //int[] playField = {1, 0, 2, 0, 0, 2, 1, 0, 1};
-        //this.playField = playField;
+        /*int[] playField = {0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 1, 1, 1, 0, 0, 0, 0,
+                0, 0, 0, 2, 1, 0, 0, 0,
+                0, 0, 2, 2, 2, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0 };
+        this.playField = playField;*/
     }
 
     public void setOpponent(String opponent) {
@@ -54,7 +61,7 @@ public class Game {
         return playField;
     }
 
-    public int getPlayFieldAtIndex(int index){
+    public static int getPlayFieldAtIndex(int index){
         if (index < 0 || index > 63){
             return 1;
         } else {

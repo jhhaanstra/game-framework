@@ -15,10 +15,15 @@ public abstract class ClientCommands {
         Client.getInstance().send("get playerlist");
         return getInfo();
     }
-
-    public static String challengePlayer(String player) {
+    
+    public static String acceptChallenge(String number) {
+	Client.getInstance().send("challenge accept " + number);
+	return getInfo();
+    }
+    
+    public static String challengePlayer(String player, String game) {
         //System.out.println("challenge \"" + player.trim() + "\" \"Tic-tac-toe\"");
-        Client.getInstance().send("challenge \"" + player.trim() + "\" \"Tic-tac-toe\"");
+        Client.getInstance().send("challenge \"" + player.trim() + "\" \"" + game + "\"");
         return getReturnMessage();
     }
 
@@ -40,7 +45,7 @@ public abstract class ClientCommands {
     }
 
     public static String getInfo() {
-        while (Client.getInstance().getInfo().empty()) {}
+        while (Client.getInstance().getInfo().size() == 0) {}
         String message = Client.getInstance().getInfo().pop();
         System.out.println("S: " + message);
         return message;

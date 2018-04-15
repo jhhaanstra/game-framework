@@ -1,13 +1,14 @@
 package lib;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Stack;
 
 public class Parser {
 
-    public static HashMap parse(Stack stack) {
+    public static HashMap parse(LinkedList list) {
         HashMap info = new HashMap();
-        String query = stack.pop().toString();
+        String query = list.removeFirst().toString();
         query = query.substring(1, query.length() - 1);
         query = query.replace("\"", "");
         query = query.replace(",", "");
@@ -23,4 +24,6 @@ public class Parser {
 
         return info;
     }
+
+
 }

@@ -12,6 +12,7 @@ public class TicTacToeController extends SimpleGameController {
         super(model, primaryStage, gameView, info);
         primaryStage.setTitle("Tic-Tac-Toe!");
         updateGame();
+        new Thread(new MoveListener()).start();
     }
 
     @Override
