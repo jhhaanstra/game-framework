@@ -23,9 +23,9 @@ public class AIController extends Thread{
         this.gameController = gameController;
         this.game = gameController.getGameModel();
         choices = new ArrayList<>();
-	innerST = new ArrayList<>();
-	innerPoss = new ArrayList<>();
-	innerST.addAll(Arrays.asList(18, 19, 20, 21, 26, 29, 34, 37, 42, 43, 44, 45));
+        innerST = new ArrayList<>();
+        innerPoss = new ArrayList<>();
+        innerST.addAll(Arrays.asList(19, 20, 26, 29, 34, 37, 43, 44));
         save = new HashMap<>();
         possMoves = gameController.getPossibleList();
         start();
@@ -33,10 +33,9 @@ public class AIController extends Thread{
 
     public void doTurn() {
 	boolean inner = true;
-        //ArrayList<Integer> choices = new ArrayList<>();
-        //HashMap<Integer, List> save = new HashMap<>();
+        HashMap<Integer, List> save = new HashMap<>();
 
-        //Set<Integer> possMoves = gameController.getPossibleList();
+        Set<Integer> possMoves = gameController.getPossibleList();
         for (int i : possMoves) {
             List toChange = gameController.getMovesList(i);
             if (!toChange.isEmpty()) {
@@ -50,8 +49,12 @@ public class AIController extends Thread{
 		innerPoss.add(checkLineContains(option));
 	    }
 	}
-	
+
         if (!choices.isEmpty()) {
+            leftUpperCorner(gameController.getOccupied());
+            rightUpperCorner(gameController.getOccupied());
+            leftLowerCorner(gameController.getOccupied());
+            rightLowerCorner(gameController.getOccupied());
             if (choices.contains(0)) {
                 ClientCommands.sendMove(0);
                 gameController.updateBoard(0, save.get(0));
@@ -84,17 +87,13 @@ public class AIController extends Thread{
                 ClientCommands.sendMove(checkLineContains(36));
                 gameController.updateBoard(checkLineContains(36), save.get(checkLineContains(36)));
                 emptyLists();
-            } else if (!innerPoss.isEmpty()){
-		Random rand = new Random();
+            } /*else if (!innerPoss.isEmpty()){
+                Random rand = new Random();
                 int x = rand.nextInt(innerPoss.size());
-		ClientCommands.sendMove(innerPoss.get(x));
-		gameController.updateBoard(innerPoss.get(x), save.get(innerPoss.get(x)));
+                ClientCommands.sendMove(innerPoss.get(x));
+                gameController.updateBoard(innerPoss.get(x), save.get(innerPoss.get(x)));
                 emptyLists();		
-	    }
-	    
-           // Hier moeten de andere functies komen, dus check inner 4 en check inner 16 bijv...
-
-            else {
+            }*/ else {
                 Random rand = new Random();
                 int x = rand.nextInt(choices.size());
                 System.out.println("This is the random number " + x);
@@ -114,10 +113,57 @@ public class AIController extends Thread{
         return 0;
     }
     
-    public void emptyLists(){
+    public void emptyLists() {
         choices.clear();
         save.clear();
-	innerPoss.clear();
+        innerPoss.clear();
         possMoves = gameController.getPossibleList();
     }
+
+    public void leftUpperCorner(List occupied) {
+        if (!occupied.contains(0)) {
+            int[] items = {1, 8, 9};
+            for (int index = 0; index < items.length; index++) {
+                if (choices.contains(items[index]) && choices.size() > 1) {
+                    System.out.println(choices.size());
+                    choices.remove(choices.indexOf(items[index]));
+                }
+            }
+        }
+    }
+
+    public void rightUpperCorner(List occupied) {
+        if (!occupied.contains(7)) {
+            int[] items = {6, 14, 15};
+            for (int index = 0; index < items.length; index++) {
+                if (choices.contains(items[index]) && choices.size() > 1) {
+                    choices.remove(choices.indexOf(items[index]));
+                }
+            }
+        }
+    }
+
+    public void leftLowerCorner(List occupied) {
+        if (!occupied.contains(56)) {
+            int[] items = {48, 49, 57};
+            for (int index = 0; index < items.length; index++) {
+                if (choices.contains(items[index]) && choices.size() > 1) {
+                    choices.remove(choices.indexOf(items[index]));
+                }
+            }
+        }
+    }
+
+    public void rightLowerCorner(List occupied) {
+        if (!occupied.contains(63)) {
+            int[] items = {54, 55, 62};
+            for (int index = 0; index < items.length; index++) {
+                if (choices.contains(items[index]) && choices.size() > 1) {
+                    choices.remove(choices.indexOf(items[index]));
+                }
+            }
+        }
+    }
+
+
 }
