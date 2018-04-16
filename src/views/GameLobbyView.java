@@ -25,8 +25,9 @@ public class GameLobbyView extends Scene {
         super(new GridPane());
         pane = (GridPane) super.getRoot();
         pane.setPadding(new Insets(12.5, 12.5, 12.5, 12.5));
-        pane.setVgap(5.5);
-        pane.setAlignment(Pos.CENTER);
+        pane.setPrefSize(400,450);
+        pane.setAlignment(Pos.TOP_CENTER);
+
         pane.add(new Label("Online players"), 0, 0);
 
         startButton = new Button("Start Game");

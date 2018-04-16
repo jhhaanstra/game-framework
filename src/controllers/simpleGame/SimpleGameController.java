@@ -107,7 +107,7 @@ public abstract class SimpleGameController {
                         r.setFill(oponentColor);
                         break;
                 }
-                r.setStroke(Color.RED);
+                r.setStroke(Color.WHITE);
                 grid.add(r, x, y);
             }
         }
