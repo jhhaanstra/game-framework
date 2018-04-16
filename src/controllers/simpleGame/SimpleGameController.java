@@ -1,5 +1,6 @@
 package controllers.simpleGame;
 
+import controllers.GameStartController;
 import models.Client;
 
 import java.util.HashMap;
@@ -137,7 +138,7 @@ public abstract class SimpleGameController {
             alert.setContentText("You can back to the game select room.");
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.OK){
-                new GameSelectController(primaryStage);
+                new GameStartController(primaryStage);
             }
         });
     }
