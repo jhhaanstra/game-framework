@@ -43,7 +43,7 @@ public class LoginView extends Scene {
 
 
         Image image = new Image(getClass().getResourceAsStream("../img/logo.png"));
-        Label label1 = new Label("s");
+        Label label1 = new Label("");
         label1.setGraphic(new ImageView(image));
 
         pane.add(label1, 0,1);

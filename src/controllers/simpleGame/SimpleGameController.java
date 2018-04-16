@@ -124,7 +124,7 @@ public abstract class SimpleGameController {
                         c.setFill(oponentColor);
                         break;
                 }
-                r.setStroke(Color.RED);
+                r.setStroke(Color.WHITE);
                 grid.add(r, x, y);
                 grid.add(c, x, y);
                 GridPane.setHalignment(c, HPos.CENTER);
