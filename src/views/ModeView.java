@@ -16,6 +16,7 @@ public class ModeView extends Scene {
     private GridPane pane;
     private Button AIButton;
     private Button playerButton;
+    private Button backButton;
 
     public ModeView() {
         super(new GridPane());
@@ -42,8 +43,13 @@ public class ModeView extends Scene {
         playerButton = new Button("Player");
         pane.add(playerButton, 0, 2);
         GridPane.setHalignment(playerButton, HPos.CENTER);
+        pane.setMargin(playerButton, new Insets(0,0,45,0));
         playerButton.setPrefWidth(100);
-
+        
+//        backButton = new Button("Back");
+//        pane.add(backButton, 0, 3);
+//        GridPane.setHalignment(backButton, HPos.RIGHT);
+//        backButton.setPrefWidth(100);
         this.pane = pane;
     }
 
@@ -53,6 +59,10 @@ public class ModeView extends Scene {
 
     public Button getAIButton () {
         return AIButton;
+    }
+    
+    public Button getBackButton () {
+        return backButton;
     }
 
     public Button getPlayerButton() {

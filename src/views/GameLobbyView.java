@@ -14,9 +14,9 @@ import javafx.scene.layout.GridPane;
 
 public class GameLobbyView extends Scene {
     private GridPane pane;
-    private Button startButton;
     private Button challengeButton;
     private Button refreshButton;
+    private Button backButton;
     private ListView<String> playerList = new ListView<>();
     ObservableList<String> lobbyData = FXCollections.observableArrayList();
     private String challengePlayer;
@@ -29,14 +29,14 @@ public class GameLobbyView extends Scene {
         pane.setAlignment(Pos.CENTER);
         pane.add(new Label("Online players"), 0, 0);
 
-        startButton = new Button("Start Game");
-        pane.add(startButton, 0 , 2);
-
         refreshButton = new Button("Refresh lobby");
         pane.add(refreshButton, 1, 2);
 
         challengeButton = new Button("Challenge");
-        pane.add(challengeButton, 0 , 3);
+        pane.add(challengeButton, 0 , 2);
+        
+        backButton = new Button("Back");
+        pane.add(backButton, 1, 3);
 
         ListView<String> listView = new ListView<>(lobbyData);
         listView.setPrefSize(200, 250);
@@ -58,11 +58,9 @@ public class GameLobbyView extends Scene {
         return pane;
     }
 
-    public Button getStartButton() {
-        return startButton;
-    }
-
     public Button getChallengeButton() { return challengeButton; }
+    
+    public Button getBackButton() { return backButton; }
 
     public ListView getListView() { return playerList; }
 

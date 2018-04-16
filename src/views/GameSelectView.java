@@ -14,6 +14,7 @@ public class GameSelectView extends Scene {
     private GridPane pane;
     private Button tttButton;
     private Button reversiButton;
+    private Button backButton;
 
     public GameSelectView() {
         super(new GridPane());
@@ -26,15 +27,22 @@ public class GameSelectView extends Scene {
         pane.add(text1, 1,0);
         pane.setMargin(text1, new Insets(0,0,45,0));
         GridPane.setHalignment(text1, HPos.CENTER);
+        
         tttButton = new Button("TicTacToe");
         pane.add(tttButton, 1, 1);
         GridPane.setHalignment(tttButton, HPos.CENTER);
+
         reversiButton = new Button("Reversi");
         reversiButton.setPrefWidth(100);
         tttButton.setPrefWidth(100);
         pane.add(reversiButton, 1, 2);
         GridPane.setHalignment(reversiButton, HPos.CENTER);
         this.pane = pane;
+
+        backButton = new Button("Back");
+        backButton.setPrefWidth(100);
+        GridPane.setHalignment(backButton, HPos.CENTER);
+        pane.add(backButton, 1, 3);
 
         Image image1 = new Image(getClass().getResourceAsStream("../img/ttt_icon.png"));
         Image image2 = new Image(getClass().getResourceAsStream("../img/reversi_icon.png"));
@@ -48,6 +56,9 @@ public class GameSelectView extends Scene {
 
         pane.setMargin(imageLabel1, new Insets(0,0,45,0));
         pane.setMargin(tttButton, new Insets(0,0,45,0));
+
+        pane.setMargin(imageLabel2, new Insets(0,0,45,0));
+        pane.setMargin(reversiButton, new Insets(0,0,45,0));
     }
 
 
@@ -57,6 +68,10 @@ public class GameSelectView extends Scene {
 
     public Button getTttButton() {
         return tttButton;
+    }
+    
+    public Button getBackButton() {
+        return backButton;
     }
 
     public Button getReversiButton() {

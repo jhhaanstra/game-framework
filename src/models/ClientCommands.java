@@ -5,6 +5,11 @@ public abstract class ClientCommands {
         Client.getInstance().send("login " + name);
         return getReturnMessage();
     }
+    
+    public static String logout() {
+        Client.getInstance().send("logout");
+        return getReturnMessage();
+    }
 
     public static String subscribeGame(String game) {
         Client.getInstance().send("subscribe " + game);

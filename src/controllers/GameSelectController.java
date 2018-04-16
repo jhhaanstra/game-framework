@@ -23,6 +23,10 @@ public class GameSelectController {
             new GameStartController(primaryStage);
             primaryStage.show();
         });
+        
+        view.getBackButton().setOnMouseClicked(e -> {
+            new ModeController(primaryStage);
+        });
 
         primaryStage.setTitle("Choose a game!");
         primaryStage.setScene(view);

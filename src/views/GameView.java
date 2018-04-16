@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import models.Game;
 import models.Player;
 
 public class GameView extends Scene {
@@ -69,18 +70,28 @@ public class GameView extends Scene {
     }
     
     public void setPlayerColor(Color color){
-	if(color == Color.WHITE){
-	    playerColor = " White";
-	} else {
-	    playerColor = " Black";
-	}
+        if(color == Color.WHITE){
+            playerColor = " White";
+        } else {
+            playerColor = " Black";
+        }
+    /*	if(color == Color.BLACK){
+            playerColor = " Black";
+        } else {
+            playerColor = " White";
+        }*/
     }
     
     public void setOpponentColor(Color color){
-	if(color == Color.WHITE){
-	    opponentColor = " Black";
-	} else {
-	    opponentColor = " White";
-	}
+        if(color == Color.WHITE){
+            opponentColor = " Black";
+        } else {
+            opponentColor = " White";
+        }
+/*        if(color == Color.BLACK){
+            opponentColor = " White";
+        } else  {
+            opponentColor = " Black";
+        }*/
     }
 }
