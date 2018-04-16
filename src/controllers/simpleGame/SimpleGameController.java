@@ -46,9 +46,13 @@ public abstract class SimpleGameController {
         if(!gameModel.isYourTurn()){
             startColor = Color.WHITE;
             oponentColor = Color.BLACK;
+            gameView.setPlayerColor(startColor);
+            gameView.setOpponentColor(oponentColor);
         } else {
             startColor = Color.BLACK;
             oponentColor = Color.WHITE;
+            gameView.setPlayerColor(startColor);
+            gameView.setOpponentColor(oponentColor);
         }
 
         primaryStage.setScene(this.gameView);
@@ -179,6 +183,7 @@ public abstract class SimpleGameController {
     }
 
     public static Color getStartColor(){
+        System.out.println(startColor);
         return startColor;
     }
 

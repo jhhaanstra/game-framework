@@ -36,6 +36,10 @@ public class GameStartController {
         view.getRefreshButton().setOnMouseClicked(e -> {
             updateListView();
         });
+        
+        view.getBackButton().setOnMouseClicked(e -> {
+            new GameSelectController(stage);
+        });
 
         primaryStage.setTitle("lobby");
         primaryStage.setScene(view);

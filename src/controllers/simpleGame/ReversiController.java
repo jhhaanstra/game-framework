@@ -159,28 +159,27 @@ public class ReversiController extends SimpleGameController {
         super.updateGame();
     }
 
+    public List getOccupied() {
+        return occupied;
+    }
+
     public void updateGame() {
-
-
-        //if (gameModel.isYourTurn()) {
-            Platform.runLater(() -> {
-                if (Settings.getInstance().getAI()) {
-                    while (ai == null) {}
-                    ai.doTurn();
-                    gameView.setTurn(gameModel.getOpponent());
-                    gameModel.setYourTurn(false);
-                } else {
-                    getPossibleList();
-                    for (int i = 0; i < possMoves.size(); i++) {
-                        List toChange = getMovesList(possMoves.get(i));
-                        if (!toChange.isEmpty()) {
-                            setOnClick(possMoves.get(i), toChange);
-                        }
+        Platform.runLater(() -> {
+            if (Settings.getInstance().getAI()) {
+                while (ai == null) {}
+                ai.doTurn();
+                gameView.setTurn(gameModel.getOpponent());
+                gameModel.setYourTurn(false);
+            } else {
+                getPossibleList();
+                for (int i = 0; i < possMoves.size(); i++) {
+                    List toChange = getMovesList(possMoves.get(i));
+                    if (!toChange.isEmpty()) {
+                        setOnClick(possMoves.get(i), toChange);
                     }
                 }
-            });
-        //}
-
+            }
+        });
     }
 
     class MoveListener implements Runnable {
