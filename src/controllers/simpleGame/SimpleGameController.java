@@ -1,13 +1,11 @@
 package controllers.simpleGame;
 
 import javafx.geometry.HPos;
-import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.shape.Circle;
+import controllers.GameStartController;
 import models.Client;
-
 import java.util.HashMap;
-import controllers.GameSelectController;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import javafx.scene.control.Alert;
@@ -15,7 +13,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-
 import models.*;
 import lib.Parser;
 import views.GameView;
@@ -157,7 +154,7 @@ public abstract class SimpleGameController {
             alert.setContentText("You can back to the game select room.");
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.OK){
-                new GameSelectController(primaryStage);
+                new GameStartController(primaryStage);
             }
         });
     }

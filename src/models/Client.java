@@ -17,6 +17,7 @@ public class Client extends Server {
     private static LinkedList<String> challenge = new LinkedList<>();
     private static LinkedList<String> score = new LinkedList<>();
     private static LinkedList<String> turn = new LinkedList<>();
+    private static LinkedList<String> playerlist = new LinkedList<>();
 
 
     public static Client getInstance() {
@@ -24,14 +25,13 @@ public class Client extends Server {
             client = new Client("127.0.0.1", 7789, (data -> {
                 if (data.contains("ERR")) errors.add(data);
                 if (data.contains("SVR")) info.add(data);
+                if (data.contains("SVR PLAYERLIST")) playerlist.add(data);
                 if (data.contains("SVR GAME MATCH")) match.add("{" + data.split("\\{")[1]);
                 //if (data.contains("SVR GAME MOVE")) moves.push("{" + data.split("\\{")[1]);
                 if (data.contains("SVR GAME MOVE")) turn.add("{" + data.split("\\{")[1]);
         		if (data.contains("SVR GAME CHALLENGE")) challenge.add("{" + data.split("\\{")[1]);
                 if (data.contains("WIN") | data.contains("DRAW") | data.contains("LOSS")) score.add(data);
-                if (data.contains("YOURTURN")) {
-                    turn.add(data);
-                }
+                if (data.contains("YOURTURN")) { turn.add(data); }
                 //System.out.println(data); // test
             }));
         }
@@ -63,6 +63,9 @@ public class Client extends Server {
     public LinkedList<String> getScore() { return score; }
 
     public LinkedList<String> getTurn() { return turn; }
+
+    public LinkedList<String> getPlayerlist() { return playerlist; }
+
 
 }
 
