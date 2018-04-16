@@ -52,15 +52,9 @@ public abstract class SimpleGameController {
         } else {
             startColor = Color.BLACK;
             oponentColor = Color.WHITE;
-            gameView.setPlayerColor(startColor);
-            gameView.setOpponentColor(oponentColor);
-        } /*else {
-            startColor = Color.BLACK;
-            oponentColor = Color.WHITE;
-            gameView.setPlayerColor(startColor);
-            gameView.setOpponentColor(oponentColor);
-        }*/
-
+        }
+        gameView.setPlayerColor(startColor);
+        gameView.setOpponentColor(oponentColor);
         primaryStage.setScene(this.gameView);
     }
 

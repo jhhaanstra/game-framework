@@ -18,11 +18,7 @@ import java.io.File;
 
 
 public class GameView extends Scene {
-
     // create media for a sound
-
-
-
     BorderPane pane;
     String playerColor;
     int playerAmount = 0;
@@ -120,11 +116,6 @@ public class GameView extends Scene {
         } else {
             playerColor = " Black";
         }
-    /*	if(color == Color.BLACK){
-            playerColor = " Black";
-        } else {
-            playerColor = " White";
-        }*/
     }
     
     public void setOpponentColor(Color color){
@@ -133,10 +124,5 @@ public class GameView extends Scene {
         } else {
             opponentColor = " White";
         }
-/*        if(color == Color.BLACK){
-            opponentColor = " White";
-        } else  {
-            opponentColor = " Black";
-        }*/
     }
 }
