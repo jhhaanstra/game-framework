@@ -4,13 +4,10 @@ import controllers.simpleGame.TicTacToeController;
 import controllers.simpleGame.ReversiController;
 
 import javafx.application.Platform;
-import models.Player;
+import models.*;
 import views.ReversiView;
 import javafx.stage.Stage;
 import lib.Parser;
-import models.Client;
-import models.ClientCommands;
-import models.Game;
 import views.GameLobbyView;
 import views.TicTacToeView;
 
@@ -56,12 +53,18 @@ public class GameStartController {
 
     public void createTicTacToe() {
         HashMap gameInfo = getGameInfo();
-        new TicTacToeController(new Game(3, 3), stage, new TicTacToeView(), gameInfo);
+        TicTacToeController ttt = new TicTacToeController(new Game(3, 3), stage, new TicTacToeView(), gameInfo);
+        /*if (Settings.getInstance().getAI()) {
+            new AIController(ttt);
+        }*/
     }
 
     public void createReversi() {
-	    HashMap gameInfo = getGameInfo();
-	    new ReversiController(new Game(8, 8), stage, new ReversiView(), gameInfo);
+        HashMap gameInfo = getGameInfo();
+        ReversiController reversi = new ReversiController(new Game(8, 8), stage, new ReversiView(), gameInfo);
+        if (Settings.getInstance().getAI()) {
+            reversi.setAi(new AIController(reversi));
+        }
     }
 
     private void updateListView() {
@@ -72,7 +75,10 @@ public class GameStartController {
         // Fetch the names from the getPlayers command
         String[] names = result.substring(16, result.length() - 2).split(", ");
         for (String name: names) {
-            view.getList().add(name.replace("\"", "") + "\n");
+            name = name.replace("\"", "");
+            if (!Player.getInstance().getName().equals(name)) {
+                view.getList().add(name.replace("\"", "") + "\n");
+            }
         }
     }
     

@@ -18,18 +18,17 @@ import views.GameView;
 import javafx.scene.control.Alert.AlertType;
 
 import java.util.*;
-import javafx.scene.shape.Circle;
 
 public abstract class SimpleGameController {
     protected Game gameModel;
     protected GameView gameView;
     protected String opponent;
     protected Stage primaryStage;
-    protected static Color startColor;
-    protected static Color oponentColor;
     List<Integer> occupied = new ArrayList<>();
     List<Integer> possMoves = new ArrayList<>();
     Set<Integer> check = new HashSet<>();
+    protected static Color startColor;
+    protected static Color oponentColor;
 
     public SimpleGameController(Game model, Stage primaryStage, GameView gameView, HashMap info) {
         gameModel = model;
@@ -43,18 +42,26 @@ public abstract class SimpleGameController {
 
         this.gameView = gameView;
         this.primaryStage = primaryStage;
+
+        if(!gameModel.isYourTurn()){
+            startColor = Color.WHITE;
+            oponentColor = Color.BLACK;
+        } else {
+            startColor = Color.BLACK;
+            oponentColor = Color.WHITE;
+        }
+
         primaryStage.setScene(this.gameView);
-	
-	if(!gameModel.isYourTurn()){
-	    startColor = Color.WHITE;
-	    oponentColor = Color.BLACK;
-	} else {
-	    startColor = Color.BLACK;
-	    oponentColor = Color.WHITE;
-	}
-	
-	GameView.setStartColor(startColor);
-	GameView.setOpponentColor(oponentColor);
+    }
+
+    public void move(int i) {
+        gameModel.updatePlayField(i);
+        ClientCommands.sendMove(i);
+        gameModel.incrementTurn();
+        gameView.setTurn(gameModel.getOpponent());
+        gameModel.setYourTurn(false);
+        updateGame();
+
     }
 
     protected void setOnClick(int i) {
@@ -89,27 +96,26 @@ public abstract class SimpleGameController {
             for (int x = 0; x < gameModel.getGridWidth(); x++) {
                 int index = (y * gameModel.getGridWidth()) + x;
                 Rectangle r = new Rectangle(50, 50);
-		Circle c = new Circle(25);
                 switch (playField[index]) {
                     case 0:
                         r.setFill(Color.GREEN);
-			c.setFill(Color.TRANSPARENT);
                         break;
                     case 1:
-                        r.setFill(Color.GREEN);
-			c.setFill(oponentColor);
+                        r.setFill(startColor);
                         break;
                     case 2:
-                        r.setFill(Color.GREEN);
-			c.setFill(startColor);
+                        r.setFill(oponentColor);
                         break;
                 }
                 r.setStroke(Color.RED);
                 grid.add(r, x, y);
-		grid.add(c, x, y);
             }
         }
         return grid;
+    }
+
+    public Game getGameModel() {
+        return gameModel;
     }
 
     public void updateGame() {
@@ -136,8 +142,14 @@ public abstract class SimpleGameController {
         });
     }
 
+
+
     protected boolean legalMove(int index) {
         return gameModel.isYourTurn() && gameModel.getPlayField()[index] == 0;
+    }
+
+    public boolean legalMove(int index, int[] playfield) {
+        return gameModel.isYourTurn() && playfield[index] == 0;
     }
 
     class MoveListener implements Runnable {
@@ -146,7 +158,7 @@ public abstract class SimpleGameController {
         @Override
         public void run() {
             while(running) {
-                if (!Client.getInstance().getMoves().empty()) {
+                if (Client.getInstance().getMoves().size() > 0) {
                     HashMap info = Parser.parse(Client.getInstance().getMoves());
                     if (!info.get("PLAYER").equals(Player.getInstance().getName())) {
                         // Laat de AI op de movestack pushen...
@@ -165,12 +177,13 @@ public abstract class SimpleGameController {
             }
         }
     }
-    
+
     public static Color getStartColor(){
-	return startColor;
+        return startColor;
     }
-    
+
     public static Color getOpponentColor(){
-	return oponentColor;
+        return oponentColor;
     }
+
 }

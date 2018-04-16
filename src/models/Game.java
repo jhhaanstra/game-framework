@@ -8,7 +8,7 @@ public class Game {
     private int gridWidth;
     private int gridHeight;
     private Player[] players;
-    private int[] playField;
+    private static int[] playField;
     private String opponent;
 
     public Game(int gridWidth, int gridHeight) {
@@ -61,7 +61,7 @@ public class Game {
         return playField;
     }
 
-    public int getPlayFieldAtIndex(int index){
+    public static int getPlayFieldAtIndex(int index){
         if (index < 0 || index > 63){
             return 1;
         } else {
