@@ -27,7 +27,7 @@ public abstract class SimpleGameController {
     protected Stage primaryStage;
     List<Integer> occupied = new ArrayList<>();
     List<Integer> possMoves = new ArrayList<>();
-    Circle[] pieces = new Circle[64];
+    Circle[] pieces;
     Set<Integer> check = new HashSet<>();
     protected static Color startColor;
     protected static Color oponentColor;
@@ -36,6 +36,7 @@ public abstract class SimpleGameController {
         gameModel = model;
         gameModel.setOpponent((String) info.get("OPPONENT")); // Misschien handig voor in de toekomst, kan anders wel weg..
         gameView.setOpponent((String) info.get("OPPONENT"));
+        pieces = new Circle[gameModel.getGridWidth() * gameModel.getGridHeight()];
 
         if (info.get("PLAYERTOMOVE").equals(Player.getInstance().getName()))
             gameModel.setYourTurn(true);

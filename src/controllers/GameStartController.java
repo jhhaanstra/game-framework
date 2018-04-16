@@ -29,7 +29,9 @@ public class GameStartController {
 
 
         view.getChallengeButton().setOnMouseClicked(e -> {
-            ClientCommands.challengePlayer(view.getPlayer(), Player.getInstance().getGame());
+            try {
+                ClientCommands.challengePlayer(view.getPlayer(), Player.getInstance().getGame());
+            } catch (NullPointerException exception) {}
             //System.out.println(ClientCommands.challengePlayer(view.getPlayer(), Player.getInstance().getGame()));
         });
 
