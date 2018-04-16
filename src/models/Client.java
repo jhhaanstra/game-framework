@@ -27,12 +27,10 @@ public class Client extends Server {
                 if (data.contains("SVR")) info.add(data);
                 if (data.contains("SVR PLAYERLIST")) playerlist.add(data);
                 if (data.contains("SVR GAME MATCH")) match.add("{" + data.split("\\{")[1]);
-                //if (data.contains("SVR GAME MOVE")) moves.push("{" + data.split("\\{")[1]);
                 if (data.contains("SVR GAME MOVE")) turn.add("{" + data.split("\\{")[1]);
         		if (data.contains("SVR GAME CHALLENGE")) challenge.add("{" + data.split("\\{")[1]);
                 if (data.contains("WIN") | data.contains("DRAW") | data.contains("LOSS")) score.add(data);
                 if (data.contains("YOURTURN")) { turn.add(data); }
-                //System.out.println(data); // test
             }));
         }
         return client;

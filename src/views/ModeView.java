@@ -27,11 +27,7 @@ public class ModeView extends Scene {
 
         Label text1 = new Label("Choose AI or player");
         pane.setMargin(text1, new Insets(0,0,45,0));
-//        Label text2 = new Label("AI");
- //       Label text3 = new Label("Player");
         pane.add(text1, 0,0);
-  //      pane.add(text2, 0,2);
-    //    pane.add(text3, 0,3);
 
         AIButton = new Button("AI");
         pane.add(AIButton, 0, 1);
@@ -45,11 +41,7 @@ public class ModeView extends Scene {
         GridPane.setHalignment(playerButton, HPos.CENTER);
         pane.setMargin(playerButton, new Insets(0,0,45,0));
         playerButton.setPrefWidth(100);
-        
-//        backButton = new Button("Back");
-//        pane.add(backButton, 0, 3);
-//        GridPane.setHalignment(backButton, HPos.RIGHT);
-//        backButton.setPrefWidth(100);
+
         this.pane = pane;
     }
 

@@ -59,7 +59,7 @@ public class LoginView extends Scene {
     }
 
     public TextField getTextField() { return textField; }
-} // end of login view
+}
 
 
 

@@ -27,7 +27,6 @@ public abstract class ClientCommands {
     }
     
     public static String challengePlayer(String player, String game) {
-        //System.out.println("challenge \"" + player.trim() + "\" \"Tic-tac-toe\"");
         Client.getInstance().send("challenge \"" + player.trim() + "\" \"" + game + "\"");
         return getReturnMessage();
     }

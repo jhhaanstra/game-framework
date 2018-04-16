@@ -10,29 +10,23 @@ import models.Game;
 import java.util.*;
 
 public class AIController extends Thread{
-    private boolean playing = true;
     private ReversiController gameController;
-    private Game game;
     private ArrayList<Integer> choices;
     private ArrayList<Integer> innerST;
     private ArrayList<Integer> innerPoss;
     private HashMap<Integer, List> save;
-    private Set<Integer> possMoves;
 
     public AIController(ReversiController gameController) {
         this.gameController = gameController;
-        this.game = gameController.getGameModel();
         choices = new ArrayList<>();
         innerST = new ArrayList<>();
         innerPoss = new ArrayList<>();
         innerST.addAll(Arrays.asList(19, 20, 26, 29, 34, 37, 43, 44));
         save = new HashMap<>();
-        possMoves = gameController.getPossibleList();
         start();
     }
 
     public void doTurn() {
-	boolean inner = true;
         HashMap<Integer, List> save = new HashMap<>();
 
         Set<Integer> possMoves = gameController.getPossibleList();
@@ -105,7 +99,7 @@ public class AIController extends Thread{
             }
         }
     }
-    
+
     private int checkLineContains(int index){
         for(int choice : choices){
             if(gameController.getMoveReceivesList(choice).contains(index)) return choice;
@@ -117,7 +111,6 @@ public class AIController extends Thread{
         choices.clear();
         save.clear();
         innerPoss.clear();
-        possMoves = gameController.getPossibleList();
     }
 
     private void checkCorner(List occupied, int startPoss, int[] items) {

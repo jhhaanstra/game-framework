@@ -9,32 +9,23 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import models.Game;
 import models.Player;
-import javafx.scene.text.Text;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import java.io.File;
-
 
 public class GameView extends Scene {
-    // create media for a sound
-    BorderPane pane;
-    String playerColor;
-    int playerAmount = 0;
-    String opponentColor;
-    int opponentAmount = 0;
-    Label opponent = new Label();
-    Label turn = new Label();
+    private BorderPane pane;
+    private String playerColor;
+    private int playerAmount = 0;
+    private String opponentColor;
+    private int opponentAmount = 0;
+    private Label opponent = new Label();
+    private Label turn = new Label();
 
     public GameView() {
         super(new BorderPane());
         pane = (BorderPane) super.getRoot();
-
-        Label Title = new Label("Re");
 	
-	setPlayerColor(SimpleGameController.getStartColor());
-	setOpponentColor(SimpleGameController.getOpponentColor());
+	    setPlayerColor(SimpleGameController.getStartColor());
+	    setOpponentColor(SimpleGameController.getOpponentColor());
 
         // Create Scoreboard
         GridPane score = new GridPane();

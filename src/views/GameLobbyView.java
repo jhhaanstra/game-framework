@@ -45,10 +45,10 @@ public class GameLobbyView extends Scene {
         lobbyData.addAll();
         listView.setItems(lobbyData);
         listView.getSelectionModel().selectedItemProperty().addListener(
-                (ObservableValue<? extends String> ov, String old_val,
-                 String new_val) -> {
-                    challengePlayer = new_val;
-                });
+            (ObservableValue<? extends String> ov, String old_val,
+            String new_val) -> {
+            challengePlayer = new_val;
+        });
 
         pane.add(listView, 0 , 1);
         this.pane = pane;
