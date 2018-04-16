@@ -5,6 +5,7 @@ import java.util.*;
 import controllers.AIController;
 import javafx.application.Platform;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import lib.Parser;
@@ -69,7 +70,8 @@ public class ReversiController extends SimpleGameController {
 
 
     protected void setOnClick(int i, List toChange) {
-        Rectangle r = (Rectangle) gameView.getGrid().getChildren().get(i);
+        //Rectangle r = (Rectangle) gameView.getGrid().getChildren().get(i);
+        Circle r = pieces[i];
         if (!occupied.contains(i)) {
             r.setFill(Color.YELLOW);
         }

@@ -1,5 +1,9 @@
 package controllers.simpleGame;
 
+import javafx.geometry.HPos;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
+import javafx.scene.shape.Circle;
 import models.Client;
 
 import java.util.HashMap;
@@ -26,6 +30,7 @@ public abstract class SimpleGameController {
     protected Stage primaryStage;
     List<Integer> occupied = new ArrayList<>();
     List<Integer> possMoves = new ArrayList<>();
+    Circle[] pieces = new Circle[64];
     Set<Integer> check = new HashSet<>();
     protected static Color startColor;
     protected static Color oponentColor;
@@ -72,7 +77,8 @@ public abstract class SimpleGameController {
     }
 
     protected void setOnClick(int i) {
-        Rectangle r = (Rectangle) gameView.getGrid().getChildren().get(i);
+        //Rectangle r = (Rectangle) gameView.getGrid().getChildren().get(i);
+        Circle r = pieces[i];
 
         if (!occupied.contains(i)) {
             r.setFill(Color.YELLOW);
@@ -83,7 +89,6 @@ public abstract class SimpleGameController {
                 System.out.println(ClientCommands.sendMove(i));
                 System.out.println(legalMove(i));
                 gameModel.updatePlayField(i);
-                //ClientCommands.sendMove(i);
                 gameModel.incrementTurn();
                 gameView.setTurn(gameModel.getOpponent());
                 gameModel.setYourTurn(false);
@@ -99,23 +104,31 @@ public abstract class SimpleGameController {
 
     protected GridPane generateGrid(int[] playField) {
         GridPane grid = new GridPane();
+        //grid.setAlignment(Pos.CENTER);
         for (int y = 0; y < gameModel.getGridHeight(); y++) {
             for (int x = 0; x < gameModel.getGridWidth(); x++) {
                 int index = (y * gameModel.getGridWidth()) + x;
+                Circle c = new Circle();
+                c.setRadius(20);
+                pieces[(y * gameModel.getGridWidth()) + x] = c;
                 Rectangle r = new Rectangle(50, 50);
+                r.setFill(Color.GREEN);
                 switch (playField[index]) {
                     case 0:
-                        r.setFill(Color.GREEN);
+                        c.setFill(Color.GREEN);
                         break;
                     case 1:
-                        r.setFill(startColor);
+                        c.setFill(startColor);
                         break;
                     case 2:
-                        r.setFill(oponentColor);
+                        c.setFill(oponentColor);
                         break;
                 }
                 r.setStroke(Color.RED);
                 grid.add(r, x, y);
+                grid.add(c, x, y);
+                GridPane.setHalignment(c, HPos.CENTER);
+                GridPane.setValignment(c, VPos.CENTER);
             }
         }
         return grid;
