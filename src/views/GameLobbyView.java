@@ -29,11 +29,14 @@ public class GameLobbyView extends Scene {
         pane.setAlignment(Pos.CENTER);
         pane.add(new Label("Online players"), 0, 0);
 
+        startButton = new Button("Start Game");
+        pane.add(startButton, 0 , 2);
+
         refreshButton = new Button("Refresh lobby");
         pane.add(refreshButton, 1, 2);
 
         challengeButton = new Button("Challenge");
-        pane.add(challengeButton, 0 , 2);
+        pane.add(challengeButton, 0 , 3);
 
         ListView<String> listView = new ListView<>(lobbyData);
         listView.setPrefSize(200, 250);
@@ -49,6 +52,7 @@ public class GameLobbyView extends Scene {
         pane.add(listView, 0 , 1);
         this.pane = pane;
     }
+
 
     public GridPane getPane() {
         return pane;
@@ -70,3 +74,4 @@ public class GameLobbyView extends Scene {
         return refreshButton;
     }
 }
+
