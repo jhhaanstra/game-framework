@@ -60,9 +60,6 @@ public class GameStartController {
     public void createTicTacToe() {
         HashMap gameInfo = getGameInfo();
         TicTacToeController ttt = new TicTacToeController(new Game(3, 3), stage, new TicTacToeView(), gameInfo);
-        /*if (Settings.getInstance().getAI()) {
-            new AIController(ttt);
-        }*/
     }
 
     public void createReversi() {

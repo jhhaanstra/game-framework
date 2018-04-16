@@ -45,16 +45,15 @@ public class AIController extends Thread{
         }
 
 	for(int option : innerST){
-	    if(Game.getPlayFieldAtIndex(option) == 2 && checkLineContains(option) != 0) {
-		innerPoss.add(checkLineContains(option));
-	    }
+	    if(Game.getPlayFieldAtIndex(option) == 2 && checkLineContains(option) != 0)
+		    innerPoss.add(checkLineContains(option));
 	}
 
         if (!choices.isEmpty()) {
-            leftUpperCorner(gameController.getOccupied());
-            rightUpperCorner(gameController.getOccupied());
-            leftLowerCorner(gameController.getOccupied());
-            rightLowerCorner(gameController.getOccupied());
+            checkCorner(gameController.getOccupied(), 0, new int[] {1, 8, 9});
+            checkCorner(gameController.getOccupied(), 7, new int[] {6, 14, 15});
+            checkCorner(gameController.getOccupied(), 56, new int[] {48, 49, 57});
+            checkCorner(gameController.getOccupied(), 63, new int[] {54, 55, 62});
             if (choices.contains(0)) {
                 ClientCommands.sendMove(0);
                 gameController.updateBoard(0, save.get(0));
@@ -87,16 +86,19 @@ public class AIController extends Thread{
                 ClientCommands.sendMove(checkLineContains(36));
                 gameController.updateBoard(checkLineContains(36), save.get(checkLineContains(36)));
                 emptyLists();
-            } /*else if (!innerPoss.isEmpty()){
-                Random rand = new Random();
-                int x = rand.nextInt(innerPoss.size());
-                ClientCommands.sendMove(innerPoss.get(x));
-                gameController.updateBoard(innerPoss.get(x), save.get(innerPoss.get(x)));
-                emptyLists();		
-            }*/ else {
+            } else if (gameController.getOccupied().size() < 32) {
+                for (int y = 2; y < 6; y++) {
+                    for (int x = 2; x < 6; x++) {
+                        if (Game.getPlayFieldAtIndex((y * 8) + x) == 2 && checkLineContains((y * 8) + x) != 0) {
+                            ClientCommands.sendMove(checkLineContains((y * 8) + x));
+                            gameController.updateBoard(checkLineContains((y * 8) + x), save.get(checkLineContains((y * 8) + x)));
+                            emptyLists();
+                        }
+                    }
+                }
+            } else {
                 Random rand = new Random();
                 int x = rand.nextInt(choices.size());
-                System.out.println("This is the random number " + x);
                 ClientCommands.sendMove(choices.get(x));
                 gameController.updateBoard(choices.get(x), save.get(choices.get(x)));
                 emptyLists();
@@ -104,37 +106,22 @@ public class AIController extends Thread{
         }
     }
     
-    public int checkLineContains(int index){
+    private int checkLineContains(int index){
         for(int choice : choices){
-                    if(gameController.getMoveReceivesList(choice).contains(index)){
-                        return choice;
-                    } 
-                }
+            if(gameController.getMoveReceivesList(choice).contains(index)) return choice;
+        }
         return 0;
     }
     
-    public void emptyLists() {
+    private void emptyLists() {
         choices.clear();
         save.clear();
         innerPoss.clear();
         possMoves = gameController.getPossibleList();
     }
 
-    public void leftUpperCorner(List occupied) {
-        if (!occupied.contains(0)) {
-            int[] items = {1, 8, 9};
-            for (int index = 0; index < items.length; index++) {
-                if (choices.contains(items[index]) && choices.size() > 1) {
-                    System.out.println(choices.size());
-                    choices.remove(choices.indexOf(items[index]));
-                }
-            }
-        }
-    }
-
-    public void rightUpperCorner(List occupied) {
-        if (!occupied.contains(7)) {
-            int[] items = {6, 14, 15};
+    private void checkCorner(List occupied, int startPoss, int[] items) {
+        if (!occupied.contains(startPoss)) {
             for (int index = 0; index < items.length; index++) {
                 if (choices.contains(items[index]) && choices.size() > 1) {
                     choices.remove(choices.indexOf(items[index]));
@@ -142,28 +129,4 @@ public class AIController extends Thread{
             }
         }
     }
-
-    public void leftLowerCorner(List occupied) {
-        if (!occupied.contains(56)) {
-            int[] items = {48, 49, 57};
-            for (int index = 0; index < items.length; index++) {
-                if (choices.contains(items[index]) && choices.size() > 1) {
-                    choices.remove(choices.indexOf(items[index]));
-                }
-            }
-        }
-    }
-
-    public void rightLowerCorner(List occupied) {
-        if (!occupied.contains(63)) {
-            int[] items = {54, 55, 62};
-            for (int index = 0; index < items.length; index++) {
-                if (choices.contains(items[index]) && choices.size() > 1) {
-                    choices.remove(choices.indexOf(items[index]));
-                }
-            }
-        }
-    }
-
-
 }
