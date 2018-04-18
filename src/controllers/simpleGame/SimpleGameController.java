@@ -1,9 +1,11 @@
 package controllers.simpleGame;
 
+import javafx.geometry.HPos;
+import javafx.geometry.VPos;
+import javafx.scene.shape.Circle;
+import controllers.GameStartController;
 import models.Client;
-
 import java.util.HashMap;
-import controllers.GameSelectController;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import javafx.scene.control.Alert;
@@ -11,7 +13,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-
 import models.*;
 import lib.Parser;
 import views.GameView;
@@ -20,67 +21,51 @@ import javafx.scene.control.Alert.AlertType;
 import java.util.*;
 
 public abstract class SimpleGameController {
-    protected Game gameModel;
-    protected GameView gameView;
-    protected String opponent;
+    protected  Game gameModel;
+    protected  GameView gameView;
+    protected  String opponent;
     protected Stage primaryStage;
-    List<Integer> occupied = new ArrayList<>();
-    List<Integer> possMoves = new ArrayList<>();
-    Set<Integer> check = new HashSet<>();
-    protected static Color startColor;
+    protected List<Integer> occupied = new ArrayList<>();
+    protected List<Integer> possMoves = new ArrayList<>();
+    protected Circle[] pieces;
+    protected  static Color startColor;
     protected static Color oponentColor;
 
     public SimpleGameController(Game model, Stage primaryStage, GameView gameView, HashMap info) {
         gameModel = model;
         gameModel.setOpponent((String) info.get("OPPONENT")); // Misschien handig voor in de toekomst, kan anders wel weg..
         gameView.setOpponent((String) info.get("OPPONENT"));
+        pieces = new Circle[gameModel.getGridWidth() * gameModel.getGridHeight()];
 
-        if (info.get("PLAYERTOMOVE").equals(Player.getInstance().getName()))
-            gameModel.setYourTurn(true);
-        else
-            gameModel.setYourTurn(false);
+        if (info.get("PLAYERTOMOVE").equals(Player.getInstance().getName())) gameModel.setYourTurn(true);
+        else gameModel.setYourTurn(false);
 
         this.gameView = gameView;
         this.primaryStage = primaryStage;
 
-        if(!gameModel.isYourTurn()){
+        if(!gameModel.isYourTurn()) {
             startColor = Color.WHITE;
             oponentColor = Color.BLACK;
-            gameView.setPlayerColor(startColor);
-            gameView.setOpponentColor(oponentColor);
         } else {
             startColor = Color.BLACK;
             oponentColor = Color.WHITE;
-            gameView.setPlayerColor(startColor);
-            gameView.setOpponentColor(oponentColor);
         }
-
+        gameView.setPlayerColor(startColor);
+        gameView.setOpponentColor(oponentColor);
         primaryStage.setScene(this.gameView);
     }
 
-    public void move(int i) {
-        gameModel.updatePlayField(i);
-        ClientCommands.sendMove(i);
-        gameModel.incrementTurn();
-        gameView.setTurn(gameModel.getOpponent());
-        gameModel.setYourTurn(false);
-        updateGame();
-
-    }
-
     protected void setOnClick(int i) {
-        Rectangle r = (Rectangle) gameView.getGrid().getChildren().get(i);
+        Circle r = pieces[i];
 
-        if (!occupied.contains(i)) {
+        if (!occupied.contains(i))
             r.setFill(Color.YELLOW);
-        }
 
         r.setOnMouseClicked(e -> {
             try {
                 System.out.println(ClientCommands.sendMove(i));
                 System.out.println(legalMove(i));
                 gameModel.updatePlayField(i);
-                //ClientCommands.sendMove(i);
                 gameModel.incrementTurn();
                 gameView.setTurn(gameModel.getOpponent());
                 gameModel.setYourTurn(false);
@@ -99,20 +84,27 @@ public abstract class SimpleGameController {
         for (int y = 0; y < gameModel.getGridHeight(); y++) {
             for (int x = 0; x < gameModel.getGridWidth(); x++) {
                 int index = (y * gameModel.getGridWidth()) + x;
+                Circle c = new Circle();
+                c.setRadius(20);
+                pieces[(y * gameModel.getGridWidth()) + x] = c;
                 Rectangle r = new Rectangle(50, 50);
+                r.setFill(Color.GREEN);
                 switch (playField[index]) {
                     case 0:
-                        r.setFill(Color.GREEN);
+                        c.setFill(Color.GREEN);
                         break;
                     case 1:
-                        r.setFill(startColor);
+                        c.setFill(startColor);
                         break;
                     case 2:
-                        r.setFill(oponentColor);
+                        c.setFill(oponentColor);
                         break;
                 }
-                r.setStroke(Color.RED);
+                r.setStroke(Color.WHITE);
                 grid.add(r, x, y);
+                grid.add(c, x, y);
+                GridPane.setHalignment(c, HPos.CENTER);
+                GridPane.setValignment(c, VPos.CENTER);
             }
         }
         return grid;
@@ -141,20 +133,15 @@ public abstract class SimpleGameController {
             alert.setContentText("You can back to the game select room.");
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.OK){
-                new GameSelectController(primaryStage);
+                new GameStartController(primaryStage);
             }
         });
     }
-
-
 
     protected boolean legalMove(int index) {
         return gameModel.isYourTurn() && gameModel.getPlayField()[index] == 0;
     }
 
-    public boolean legalMove(int index, int[] playfield) {
-        return gameModel.isYourTurn() && playfield[index] == 0;
-    }
 
     class MoveListener implements Runnable {
         boolean running = true;
@@ -183,7 +170,6 @@ public abstract class SimpleGameController {
     }
 
     public static Color getStartColor(){
-        System.out.println(startColor);
         return startColor;
     }
 

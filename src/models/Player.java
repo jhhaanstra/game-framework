@@ -4,7 +4,6 @@ public class Player {
     private static Player player;
     private static String name;
     private static String game;
-    private static boolean turn;
 
     private Player() {}
 
@@ -28,14 +27,4 @@ public class Player {
     public String getGame() {
         return game;
     }
-
-    public void setTurn(boolean newTurn) {
-        turn = newTurn;
-    }
-
-    public boolean getTurn() {
-        return turn;
-    }
-
-
 }

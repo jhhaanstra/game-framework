@@ -7,26 +7,13 @@ public class Game {
     private boolean yourTurn;
     private int gridWidth;
     private int gridHeight;
-    private Player[] players;
     private static int[] playField;
     private String opponent;
 
     public Game(int gridWidth, int gridHeight) {
         this.gridWidth = gridWidth;
         this.gridHeight = gridHeight;
-        this.players = players;
         this.playField = new int[gridWidth * gridHeight];
-
-        // Test :)
-        /*int[] playField = {0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 1, 1, 1, 0, 0, 0, 0,
-                0, 0, 0, 2, 1, 0, 0, 0,
-                0, 0, 2, 2, 2, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0 };
-        this.playField = playField;*/
     }
 
     public void setOpponent(String opponent) {
@@ -77,9 +64,6 @@ public class Game {
         System.out.println("your turn is now: " + yourTurn);
         this.yourTurn = yourTurn;
     }
-
-    /*public void updatePlayField(int index, int value) {
-        playField[index] = value;*/
 
     public void updatePlayField(int index) {
         playField[index] = (isYourTurn()) ? 1 : 2;

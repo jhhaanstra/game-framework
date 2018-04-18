@@ -29,8 +29,9 @@ public class GameStartController {
 
 
         view.getChallengeButton().setOnMouseClicked(e -> {
-            ClientCommands.challengePlayer(view.getPlayer(), Player.getInstance().getGame());
-            //System.out.println(ClientCommands.challengePlayer(view.getPlayer(), Player.getInstance().getGame()));
+            try {
+                ClientCommands.challengePlayer(view.getPlayer(), Player.getInstance().getGame());
+            } catch (NullPointerException exception) {}
         });
 
         view.getRefreshButton().setOnMouseClicked(e -> {
@@ -58,9 +59,6 @@ public class GameStartController {
     public void createTicTacToe() {
         HashMap gameInfo = getGameInfo();
         TicTacToeController ttt = new TicTacToeController(new Game(3, 3), stage, new TicTacToeView(), gameInfo);
-        /*if (Settings.getInstance().getAI()) {
-            new AIController(ttt);
-        }*/
     }
 
     public void createReversi() {
@@ -113,7 +111,6 @@ public class GameStartController {
 			}
                         if (!Client.getInstance().getMatch().isEmpty()) {
                             running = false;
-                            // Dit kan misschien weg, we weten nog niet of de server ook daadwerkelijk reversi stuurt als je ingeschreven staat op TicTacToe en vice versa...
                             if (Player.getInstance().getGame().equals("Tic-tac-toe")) {
                                 createTicTacToe();
                             } else {

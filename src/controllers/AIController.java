@@ -1,38 +1,37 @@
 package controllers;
 
 import controllers.simpleGame.ReversiController;
-import controllers.simpleGame.SimpleGameController;
-import javafx.application.Platform;
-import lib.GameStateNode;
 import models.ClientCommands;
 import models.Game;
 
 import java.util.*;
 
+/**
+ * Deze class zorgt voor de innerlijke werkingen van de AI
+ * hoe de AI haar zetten kiest samen met de methodes die ervoor gebruikt worden
+ */
 public class AIController extends Thread{
-    private boolean playing = true;
     private ReversiController gameController;
-    private Game game;
     private ArrayList<Integer> choices;
     private ArrayList<Integer> innerST;
     private ArrayList<Integer> innerPoss;
     private HashMap<Integer, List> save;
-    private Set<Integer> possMoves;
 
     public AIController(ReversiController gameController) {
         this.gameController = gameController;
-        this.game = gameController.getGameModel();
         choices = new ArrayList<>();
         innerST = new ArrayList<>();
         innerPoss = new ArrayList<>();
         innerST.addAll(Arrays.asList(19, 20, 26, 29, 34, 37, 43, 44));
         save = new HashMap<>();
-        possMoves = gameController.getPossibleList();
         start();
     }
 
+    /**
+     * de doTurn method word gebruikt om de positie van de zet
+     * die de AI gaat zetten te bepalen 
+     */
     public void doTurn() {
-	boolean inner = true;
         HashMap<Integer, List> save = new HashMap<>();
 
         Set<Integer> possMoves = gameController.getPossibleList();
@@ -45,96 +44,87 @@ public class AIController extends Thread{
         }
 
 	for(int option : innerST){
-	    if(Game.getPlayFieldAtIndex(option) == 2 && checkLineContains(option) != 0) {
-		innerPoss.add(checkLineContains(option));
-	    }
+	    if(Game.getPlayFieldAtIndex(option) == 2 && checkLineContains(option) != 0)
+		    innerPoss.add(checkLineContains(option));
 	}
 
         if (!choices.isEmpty()) {
-            leftUpperCorner(gameController.getOccupied());
-            rightUpperCorner(gameController.getOccupied());
-            leftLowerCorner(gameController.getOccupied());
-            rightLowerCorner(gameController.getOccupied());
-            if (choices.contains(0)) {
-                ClientCommands.sendMove(0);
-                gameController.updateBoard(0, save.get(0));
-                emptyLists();
-            } else if (choices.contains(7)) {
-                ClientCommands.sendMove(7);
-                gameController.updateBoard(7, save.get(7));
-                emptyLists();
-            } else if (choices.contains(56)) {
-                ClientCommands.sendMove(56);
-                gameController.updateBoard(56, save.get(56));
-                emptyLists();
-            } else if (choices.contains(63)) {
-                ClientCommands.sendMove(63);
-                gameController.updateBoard(63, save.get(63));
-                emptyLists();
-            } else if (Game.getPlayFieldAtIndex(27) == 2 && checkLineContains(27) != 0) {
-                ClientCommands.sendMove(checkLineContains(27));
-                gameController.updateBoard(checkLineContains(27), save.get(checkLineContains(27)));
-                emptyLists();
-            } else if (Game.getPlayFieldAtIndex(28) == 2 && checkLineContains(28) != 0) {
-                ClientCommands.sendMove(checkLineContains(28));
-                gameController.updateBoard(checkLineContains(28), save.get(checkLineContains(28)));
-                emptyLists();
-            } else if (Game.getPlayFieldAtIndex(35) == 2 && checkLineContains(35) != 0) {
-                ClientCommands.sendMove(checkLineContains(35));
-                gameController.updateBoard(checkLineContains(35), save.get(checkLineContains(35)));
-                emptyLists();
-            } else if (Game.getPlayFieldAtIndex(36) == 2 && checkLineContains(36) != 0) {
-                ClientCommands.sendMove(checkLineContains(36));
-                gameController.updateBoard(checkLineContains(36), save.get(checkLineContains(36)));
-                emptyLists();
-            } /*else if (!innerPoss.isEmpty()){
-                Random rand = new Random();
-                int x = rand.nextInt(innerPoss.size());
-                ClientCommands.sendMove(innerPoss.get(x));
-                gameController.updateBoard(innerPoss.get(x), save.get(innerPoss.get(x)));
-                emptyLists();		
-            }*/ else {
+            checkCorner(gameController.getOccupied(), 0, new int[] {1, 8, 9});
+            checkCorner(gameController.getOccupied(), 7, new int[] {6, 14, 15});
+            checkCorner(gameController.getOccupied(), 56, new int[] {48, 49, 57});
+            checkCorner(gameController.getOccupied(), 63, new int[] {54, 55, 62});
+            
+            if (choices.contains(0) || 
+                    choices.contains(7) || 
+                        choices.contains(56) || 
+                            choices.contains(63)) {
+                for(int corner : new int[] {0, 7, 56, 63}){
+                    if(choices.contains(corner)){
+                        ClientCommands.sendMove(corner);
+                        gameController.updateBoard(corner, save.get(corner));
+                        emptyLists();
+                    }
+                }           
+            } else if(Game.getPlayFieldAtIndex(27) == 2 && checkLineContains(27) != 0 ||
+                        Game.getPlayFieldAtIndex(28) == 2 && checkLineContains(28) != 0 ||
+                        Game.getPlayFieldAtIndex(35) == 2 && checkLineContains(35) != 0 ||
+                        Game.getPlayFieldAtIndex(36) == 2 && checkLineContains(36) != 0 ) {
+                for(int middle : new int[] {27, 28, 35, 36}) {
+                    if(Game.getPlayFieldAtIndex(middle) == 2 && checkLineContains(middle) != 0){
+                        ClientCommands.sendMove(checkLineContains(middle));
+                        gameController.updateBoard(checkLineContains(middle), save.get(checkLineContains(middle)));
+                        emptyLists();
+                    }
+                }
+            } else if (gameController.getOccupied().size() < 32) {
+                for (int y = 2; y < 6; y++) {
+                    for (int x = 2; x < 6; x++) {
+                        if (Game.getPlayFieldAtIndex((y * 8) + x) == 2 && checkLineContains((y * 8) + x) != 0) {
+                            ClientCommands.sendMove(checkLineContains((y * 8) + x));
+                            gameController.updateBoard(checkLineContains((y * 8) + x), save.get(checkLineContains((y * 8) + x)));
+                            emptyLists();
+                        }
+                    }
+                }
+            } else {
                 Random rand = new Random();
                 int x = rand.nextInt(choices.size());
-                System.out.println("This is the random number " + x);
                 ClientCommands.sendMove(choices.get(x));
                 gameController.updateBoard(choices.get(x), save.get(choices.get(x)));
                 emptyLists();
             }
         }
     }
-    
-    public int checkLineContains(int index){
+
+    /**
+     * kijkt of je een steentje kunt krijgen bij een bepaalde keuze
+     * @param index
+     * @return de keuze waarmee je index kunt krijgen
+     */
+    private int checkLineContains(int index){
         for(int choice : choices){
-                    if(gameController.getMoveReceivesList(choice).contains(index)){
-                        return choice;
-                    } 
-                }
+            if(gameController.getMoveReceivesList(choice).contains(index)) return choice;
+        }
         return 0;
     }
     
-    public void emptyLists() {
+    /**
+     * maakt alle lijsten leeg
+     */
+    private void emptyLists() {
         choices.clear();
         save.clear();
         innerPoss.clear();
-        possMoves = gameController.getPossibleList();
     }
 
-    public void leftUpperCorner(List occupied) {
-        if (!occupied.contains(0)) {
-            int[] items = {1, 8, 9};
-            for (int index = 0; index < items.length; index++) {
-                if (choices.contains(items[index]) && choices.size() > 1) {
-                    System.out.println(choices.size());
-                    choices.remove(choices.indexOf(items[index]));
-                }
-            }
-        }
-    }
-
-    public void rightUpperCorner(List occupied) {
-        if (!occupied.contains(7)) {
-            int[] items = {6, 14, 15};
+    /**
+     * zorgt ervoor dat de AI zo min mogelijk de posities om de hoeken pakt
+     * @param occupied
+     * @param startPoss
+     * @param items 
+     */
+    private void checkCorner(List occupied, int startPoss, int[] items) {
+        if (!occupied.contains(startPoss)) {
             for (int index = 0; index < items.length; index++) {
                 if (choices.contains(items[index]) && choices.size() > 1) {
                     choices.remove(choices.indexOf(items[index]));
@@ -142,28 +132,4 @@ public class AIController extends Thread{
             }
         }
     }
-
-    public void leftLowerCorner(List occupied) {
-        if (!occupied.contains(56)) {
-            int[] items = {48, 49, 57};
-            for (int index = 0; index < items.length; index++) {
-                if (choices.contains(items[index]) && choices.size() > 1) {
-                    choices.remove(choices.indexOf(items[index]));
-                }
-            }
-        }
-    }
-
-    public void rightLowerCorner(List occupied) {
-        if (!occupied.contains(63)) {
-            int[] items = {54, 55, 62};
-            for (int index = 0; index < items.length; index++) {
-                if (choices.contains(items[index]) && choices.size() > 1) {
-                    choices.remove(choices.indexOf(items[index]));
-                }
-            }
-        }
-    }
-
-
 }

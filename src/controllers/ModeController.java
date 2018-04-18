@@ -21,11 +21,6 @@ public class ModeController {
             Settings.getInstance().setAI(false);
             new GameSelectController(stage);
         });
-        
-//        view.getBackButton().setOnMouseClicked(e -> {
-//            ClientCommands.logout();           
-//            new LoginController(stage);
-//        });
 
         this.stage = stage;
         this.stage.setScene(view);
