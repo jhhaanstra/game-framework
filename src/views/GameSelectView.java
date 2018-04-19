@@ -10,12 +10,19 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
+/**
+ * Deze class zorgt voor het uiterlijk en de layout voor het selecteren van 
+ * een game
+ */
 public class GameSelectView extends Scene {
     private GridPane pane;
     private Button tttButton;
     private Button reversiButton;
     private Button backButton;
 
+    /**
+     * zorgt ervoor dat alles op de goede plek in de gridpane wordt gezet 
+     */
     public GameSelectView() {
         super(new GridPane());
         pane = (GridPane) super.getRoot();
@@ -29,12 +36,12 @@ public class GameSelectView extends Scene {
         GridPane.setHalignment(text1, HPos.CENTER);
         
         tttButton = new Button("TicTacToe");
+        tttButton.setPrefWidth(100);
         pane.add(tttButton, 1, 1);
         GridPane.setHalignment(tttButton, HPos.CENTER);
 
         reversiButton = new Button("Reversi");
         reversiButton.setPrefWidth(100);
-        tttButton.setPrefWidth(100);
         pane.add(reversiButton, 1, 2);
         GridPane.setHalignment(reversiButton, HPos.CENTER);
         this.pane = pane;
@@ -62,18 +69,34 @@ public class GameSelectView extends Scene {
     }
 
 
+    /**
+     * geeft de status Gridpane terug
+     * @return het Gridpane
+     */
     public GridPane getPane() {
         return pane;
     }
 
+    /**
+     * geeft de status van de tic-tac-toe knop
+     * @return de TTT knop
+     */
     public Button getTttButton() {
         return tttButton;
     }
     
+    /**
+     * geeft de status van de terug knop
+     * @return terug knop
+     */
     public Button getBackButton() {
         return backButton;
     }
 
+    /**
+     * geeft de status van de reversi knop
+     * @return reversi knop
+     */
     public Button getReversiButton() {
         return reversiButton;
     }

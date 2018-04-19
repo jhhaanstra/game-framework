@@ -3,21 +3,23 @@ package views;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-
+/**
+ * deze class zorgt voor de layout en het uiterlijk voor het selecteren van
+ * een speler of een AI
+ */
 public class ModeView extends Scene {
     private GridPane pane;
     private Button AIButton;
     private Button playerButton;
     private Button backButton;
 
+    /**
+     * zorgt ervoor dat alles op de goede plek in de gridpane wordt gezet 
+     */
     public ModeView() {
         super(new GridPane());
         pane = (GridPane) super.getRoot();
@@ -45,18 +47,34 @@ public class ModeView extends Scene {
         this.pane = pane;
     }
 
+    /**
+     * geeft de status van de gridpan
+     * @return grid pane
+     */
     public GridPane getPane() {
         return pane;
     }
 
+    /**
+     * geeft de status van de AI knop
+     * @return AI knop
+     */
     public Button getAIButton () {
         return AIButton;
     }
     
+    /**
+     * geeft de status van de terug knop
+     * @return terug knop
+     */
     public Button getBackButton () {
         return backButton;
     }
 
+    /**
+     * geeft de status van de speler knop
+     * @return speler knop
+     */
     public Button getPlayerButton() {
         return playerButton;
     }

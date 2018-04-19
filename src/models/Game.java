@@ -49,11 +49,8 @@ public class Game {
     }
 
     public static int getPlayFieldAtIndex(int index){
-        if (index < 0 || index > 63){
-            return 1;
-        } else {
-            return playField[index];
-        }
+        if (index < 0 || index > 63)return 1;
+        else return playField[index];
     }
     
     public void setPlayFieldAtIndex(int index, int person){
@@ -61,7 +58,6 @@ public class Game {
     }
 
     public void setYourTurn(boolean yourTurn) {
-        System.out.println("your turn is now: " + yourTurn);
         this.yourTurn = yourTurn;
     }
 

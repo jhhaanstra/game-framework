@@ -1,10 +1,19 @@
 package controllers.simpleGame;
 
+import javafx.application.Platform;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import models.*;
 import views.GameView;
 import java.util.ArrayList;
 import java.util.HashMap;
+import lib.Parser;
+import models.*;
+import views.GameView;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -71,5 +80,46 @@ public class TicTacToeController extends SimpleGameController implements GameCon
     public void updateBoard(int i) {
         gameModel.updatePlayField(i);
         gameModel.incrementTurn();
+    }
+
+    class MoveListener implements Runnable {
+        boolean running = true;
+
+        @Override
+        public void run() {
+            while(running) {
+
+                if (Client.getInstance().getTurn().size() > 0) {
+                    if (Client.getInstance().getTurn().getFirst().contains("DETAILS")) {
+                        HashMap info = Parser.parse(Client.getInstance().getTurn());
+                        if (!info.get("PLAYER").equals(Player.getInstance().getName())) {
+                            Platform.runLater(() -> {
+                                int index = Integer.valueOf((String) info.get("MOVE"));
+                                updateBoard(index);
+                            });
+                        }
+                    } else {
+                        Client.getInstance().getTurn().removeFirst();
+                        gameModel.setYourTurn(true);
+                        Platform.runLater(() -> {
+                            updateGame();
+                        });
+                    }
+                }
+
+                if (Client.getInstance().getScore().size() > 0) {
+                    getScore();
+                    running = false;
+                }
+
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+        }
     }
 }

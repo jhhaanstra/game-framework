@@ -51,7 +51,6 @@ public abstract class SimpleGameController {
             gameModel.setYourTurn(false);
             gameView.setTurn(gameModel.getOpponent());
         }
-
         this.gameView = gameView;
         this.primaryStage = primaryStage;
 

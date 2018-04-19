@@ -193,13 +193,12 @@ public class ReversiController extends SimpleGameController implements GameContr
             if (Settings.getInstance().getAI()) {
                 // Wacht tot de AI geladen is om NullPointer te voorkomen
                 while (ai == null) {}
-                ai.doTurn();
                 gameView.setTurn(gameModel.getOpponent());
+                ai.doTurn();
                 gameModel.setYourTurn(false);
             } else {
                 ArrayList<Integer> possMoves = new ArrayList<>();
                 possMoves.addAll(getPossibleList());
-
                 for (int i = 0; i < possMoves.size(); i++) {
                     List toChange = getMoves(possMoves.get(i));
                     if (!toChange.isEmpty()) {
