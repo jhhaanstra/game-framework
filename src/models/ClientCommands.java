@@ -83,7 +83,7 @@ public abstract class ClientCommands {
         if (Client.getInstance().getErorrs().isEmpty()) {
             return "true";
         }
-        else return (String) Client.getInstance().getErorrs().pop();
+        else return Client.getInstance().getErorrs().pop();
     }
 
     /**
