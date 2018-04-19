@@ -9,6 +9,9 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.geometry.HPos;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 /**
  * Deze class zorgt voor het uiterlijk en de layout voor het selecteren van 
@@ -34,7 +37,6 @@ public class GameSelectView extends Scene {
         pane.add(text1, 1,0);
         pane.setMargin(text1, new Insets(0,0,45,0));
         GridPane.setHalignment(text1, HPos.CENTER);
-        
         tttButton = new Button("TicTacToe");
         tttButton.setPrefWidth(100);
         pane.add(tttButton, 1, 1);
@@ -53,6 +55,7 @@ public class GameSelectView extends Scene {
 
         Image image1 = new Image(getClass().getResourceAsStream("../img/ttt_icon.png"));
         Image image2 = new Image(getClass().getResourceAsStream("../img/reversi_icon.png"));
+
         Label imageLabel1 = new Label("");
         Label imageLabel2 = new Label("");
         imageLabel1.setGraphic(new ImageView(image1));

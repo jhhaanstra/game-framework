@@ -216,5 +216,4 @@ public class ReversiController extends SimpleGameController implements GameContr
     public List getOccupied() {
         return occupied;
     }
-
 }

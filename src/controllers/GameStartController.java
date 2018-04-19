@@ -106,9 +106,9 @@ public class GameStartController {
             while (running) {
                 Platform.runLater(() -> {
                     try {
-			if (!Client.getInstance().getChallenge().isEmpty()) {			    
-			    challengeAlert();
-			}
+                        if (!Client.getInstance().getChallenge().isEmpty()) {
+                            challengeAlert();
+                        }
                         if (!Client.getInstance().getMatch().isEmpty()) {
                             running = false;
                             if (Player.getInstance().getGame().equals("Tic-tac-toe")) {

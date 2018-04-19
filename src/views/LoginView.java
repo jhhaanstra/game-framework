@@ -11,6 +11,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
 
 public class LoginView extends Scene {
     private GridPane pane;
@@ -33,17 +36,14 @@ public class LoginView extends Scene {
         textField = new TextField();
         pane.setMargin(textField, new Insets(15,0,15,0));
         pane.add(textField, 0, 3);
-        
+
         loginButton = new Button("Login");
         loginButton.setPrefWidth(100);
         GridPane.setHalignment(loginButton, HPos.CENTER);
-        
         GridPane.setHalignment(text1, HPos.CENTER);
         GridPane.setValignment(text1, VPos.TOP);
         GridPane.setHalignment(text2, HPos.CENTER);
         pane.add(loginButton, 0, 4);
-
-
         Image image = new Image(getClass().getResourceAsStream("../img/logo.png"));
         Label label1 = new Label("");
         label1.setGraphic(new ImageView(image));

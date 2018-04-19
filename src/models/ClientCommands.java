@@ -106,5 +106,4 @@ public abstract class ClientCommands {
         String message = Client.getInstance().getPlayerlist().pop();
         return message;
     }
-
 }

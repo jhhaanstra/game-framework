@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import models.Player;
 
@@ -69,7 +70,6 @@ public class GameView extends Scene {
         pane.setPrefSize(500,600);
         pane.setCenter(new GridPane());
         pane.setBottom((footer));
-
     }
 
     /**
