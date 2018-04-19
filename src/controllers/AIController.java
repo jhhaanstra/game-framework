@@ -31,7 +31,7 @@ public class AIController extends Thread{
 
         Set<Integer> possMoves = gameController.getPossibleList();
         for (int i : possMoves) {
-            List toChange = gameController.getMovesList(i);
+            List toChange = gameController.getMoves(i);
             if (!toChange.isEmpty()) {
                 save.put(i, toChange);
                 choices.add(i);
@@ -50,42 +50,42 @@ public class AIController extends Thread{
             checkCorner(gameController.getOccupied(), 63, new int[] {54, 55, 62});
             if (choices.contains(0)) {
                 ClientCommands.sendMove(0);
-                gameController.updateBoard(0, save.get(0));
+                gameController.updateBoard(0);
                 emptyLists();
             } else if (choices.contains(7)) {
                 ClientCommands.sendMove(7);
-                gameController.updateBoard(7, save.get(7));
+                gameController.updateBoard(7);
                 emptyLists();
             } else if (choices.contains(56)) {
                 ClientCommands.sendMove(56);
-                gameController.updateBoard(56, save.get(56));
+                gameController.updateBoard(56);
                 emptyLists();
             } else if (choices.contains(63)) {
                 ClientCommands.sendMove(63);
-                gameController.updateBoard(63, save.get(63));
+                gameController.updateBoard(63);
                 emptyLists();
             } else if (Game.getPlayFieldAtIndex(27) == 2 && checkLineContains(27) != 0) {
                 ClientCommands.sendMove(checkLineContains(27));
-                gameController.updateBoard(checkLineContains(27), save.get(checkLineContains(27)));
+                gameController.updateBoard(checkLineContains(27));
                 emptyLists();
             } else if (Game.getPlayFieldAtIndex(28) == 2 && checkLineContains(28) != 0) {
                 ClientCommands.sendMove(checkLineContains(28));
-                gameController.updateBoard(checkLineContains(28), save.get(checkLineContains(28)));
+                gameController.updateBoard(checkLineContains(28));
                 emptyLists();
             } else if (Game.getPlayFieldAtIndex(35) == 2 && checkLineContains(35) != 0) {
                 ClientCommands.sendMove(checkLineContains(35));
-                gameController.updateBoard(checkLineContains(35), save.get(checkLineContains(35)));
+                gameController.updateBoard(checkLineContains(35));
                 emptyLists();
             } else if (Game.getPlayFieldAtIndex(36) == 2 && checkLineContains(36) != 0) {
                 ClientCommands.sendMove(checkLineContains(36));
-                gameController.updateBoard(checkLineContains(36), save.get(checkLineContains(36)));
+                gameController.updateBoard(checkLineContains(36));
                 emptyLists();
             } else if (gameController.getOccupied().size() < 32) {
                 for (int y = 2; y < 6; y++) {
                     for (int x = 2; x < 6; x++) {
                         if (Game.getPlayFieldAtIndex((y * 8) + x) == 2 && checkLineContains((y * 8) + x) != 0) {
                             ClientCommands.sendMove(checkLineContains((y * 8) + x));
-                            gameController.updateBoard(checkLineContains((y * 8) + x), save.get(checkLineContains((y * 8) + x)));
+                            gameController.updateBoard(checkLineContains((y * 8) + x));
                             emptyLists();
                         }
                     }
@@ -94,7 +94,7 @@ public class AIController extends Thread{
                 Random rand = new Random();
                 int x = rand.nextInt(choices.size());
                 ClientCommands.sendMove(choices.get(x));
-                gameController.updateBoard(choices.get(x), save.get(choices.get(x)));
+                gameController.updateBoard(choices.get(x));
                 emptyLists();
             }
         }
@@ -102,7 +102,7 @@ public class AIController extends Thread{
 
     private int checkLineContains(int index){
         for(int choice : choices){
-            if(gameController.getMoveReceivesList(choice).contains(index)) return choice;
+            if(gameController.getMoves(choice).contains(index)) return choice;
         }
         return 0;
     }
